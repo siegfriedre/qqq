@@ -317,6 +317,10 @@
         rsi12Arr.unshift(null);
         rsi24Arr.unshift(null);
 
+        var totalCandles = dates.length;
+        var showCount = Math.min(120, totalCandles);
+        var dzStart = totalCandles > 0 ? ((totalCandles - showCount) / totalCandles * 100).toFixed(1) : 0;
+
         var option = {
             backgroundColor: 'transparent',
             grid: [
@@ -515,7 +519,7 @@
                 {
                     type: 'inside',
                     xAxisIndex: [0, 1, 2],
-                    start: 80,
+                    start: dzStart,
                     end: 100,
                     zoomOnMouseWheel: true,
                     moveOnMouseMove: true,
@@ -526,7 +530,7 @@
                 {
                     type: 'slider',
                     xAxisIndex: [0, 1, 2],
-                    start: 80,
+                    start: dzStart,
                     end: 100,
                     minSpan: 1,
                     maxSpan: 100,
