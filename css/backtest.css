@@ -390,12 +390,13 @@
     .bt-body { padding: 10px; }
 
     .bt-global {
-        display: grid;
-        grid-template-columns: 1fr 1fr auto;
+        display: flex;
+        flex-wrap: wrap;
         gap: 8px;
-        align-items: end;
+        align-items: flex-end;
     }
-    .bt-global .bt-field { min-width: 0; overflow: hidden; }
+    .bt-global .bt-field { flex: 1 1 45%; min-width: 120px; }
+    .bt-global .bt-run { flex: 0 0 auto; }
 
     .bt-field label { font-size: 12px; }
     .bt-field select, .bt-field input { font-size: 15px; padding: 8px 10px; }
@@ -443,9 +444,9 @@
 
 @media (max-width: 480px) {
     .bt-title { font-size: 13px; }
-    .bt-global { grid-template-columns: 1fr 1fr; gap: 6px; }
-    .bt-global .bt-run { grid-column: 1 / -1; }
-    .bt-field { min-width: 0; }
+    .bt-global { gap: 6px; }
+    .bt-global .bt-field { flex: 1 1 45%; min-width: 100px; }
+    .bt-global .bt-run { flex: 1 1 100%; }
     .bt-field label { font-size: 11px; }
     .bt-field select, .bt-field input { font-size: 14px; padding: 6px 8px; width: 100%; }
     .bt-field input[type="date"] { width: 100%; }
