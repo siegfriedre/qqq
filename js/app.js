@@ -12,6 +12,7 @@
     let stockData = {};
     let activeSymbol = 'QQQ';
     let activeRange = '6mo';
+    let activeInterval = '1d';
     let mainChart;
 
     const dom = {
@@ -19,6 +20,7 @@
         mainChart: document.getElementById('mainChart'),
         chartTitle: document.getElementById('chartTitle'),
         rangeSelector: document.getElementById('rangeSelector'),
+        intervalSelector: document.getElementById('intervalSelector'),
         clock: document.getElementById('clock'),
         stats: {
             open: document.getElementById('stat-open'),
@@ -168,6 +170,72 @@
         }
 
         return { ohlc, volumes: cleanVolumes, dates, closes: cleanCloses };
+    }
+
+    function aggregateData(data, interval) {
+        if (interval === '1d') return data;
+
+        const { ohlc, volumes, dates, closes } = data;
+        const agg = [];
+        const aggVols = [];
+        const aggDates = [];
+        const aggCloses = [];
+        var group = null;
+
+        function getKey(ts) {
+            var d = new Date(ts);
+            switch (interval) {
+                case '1wk':
+                    var day = d.getDay();
+                    var monday = new Date(d);
+                    monday.setDate(d.getDate() - ((day + 6) % 7));
+                    return monday.getFullYear() + '-' + String(monday.getMonth() + 1).padStart(2, '0') + '-' + String(monday.getDate()).padStart(2, '0');
+                case '1mo':
+                    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+                case '3mo':
+                    var q = Math.floor(d.getMonth() / 3);
+                    return d.getFullYear() + '-Q' + (q + 1);
+                case '1y':
+                    return String(d.getFullYear());
+                default:
+                    return String(d.getTime());
+            }
+        }
+
+        for (var i = 0; i < dates.length; i++) {
+            var key = getKey(dates[i]);
+            var item = ohlc[i].value;
+            if (!group || group.key !== key) {
+                if (group) {
+                    agg.push({ value: [group.date, group.open, group.close, group.low, group.high] });
+                    aggVols.push(group.volume);
+                    aggDates.push(group.date);
+                    aggCloses.push(group.close);
+                }
+                group = {
+                    key: key,
+                    date: dates[i],
+                    open: item[1],
+                    close: item[2],
+                    low: item[3],
+                    high: item[4],
+                    volume: volumes[i]
+                };
+            } else {
+                group.close = item[2];
+                if (item[3] < group.low) group.low = item[3];
+                if (item[4] > group.high) group.high = item[4];
+                group.volume += volumes[i];
+            }
+        }
+        if (group) {
+            agg.push({ value: [group.date, group.open, group.close, group.low, group.high] });
+            aggVols.push(group.volume);
+            aggDates.push(group.date);
+            aggCloses.push(group.close);
+        }
+
+        return { ohlc: agg, volumes: aggVols, dates: aggDates, closes: aggCloses };
     }
 
     function renderMainChart(data) {
@@ -484,13 +552,15 @@
         }
     }
 
-    async function loadAndRender(symbol, range, setActive) {
+    async function loadAndRender(symbol, range, interval, setActive) {
         if (setActive) {
             activeSymbol = symbol;
             activeRange = range;
+            activeInterval = interval || '1d';
         }
 
-        dom.chartTitle.textContent = symbol + ' — CANDLESTICK CHART';
+        var intervalNames = { '1d': '日K', '1wk': '周K', '1mo': '月K', '3mo': '季K', '1y': '年K' };
+        dom.chartTitle.textContent = symbol + ' — ' + (intervalNames[activeInterval] || '日K') + ' CANDLESTICK';
 
         var cards = dom.cards.querySelectorAll('.card');
         cards.forEach(function (c) {
@@ -499,7 +569,12 @@
 
         var rangeBtns = dom.rangeSelector.querySelectorAll('.range-btn');
         rangeBtns.forEach(function (b) {
-            b.classList.toggle('active', b.dataset.range === range);
+            b.classList.toggle('active', b.dataset.range === activeRange);
+        });
+
+        var intervalBtns = dom.intervalSelector.querySelectorAll('.range-btn');
+        intervalBtns.forEach(function (b) {
+            b.classList.toggle('active', b.dataset.interval === activeInterval);
         });
 
         var result = stockData[symbol + '_' + range];
@@ -517,6 +592,7 @@
         }
 
         var chartData = buildCandlestickData(result);
+        chartData = aggregateData(chartData, activeInterval);
         renderMainChart(chartData);
         updateStats(result);
     }
@@ -551,7 +627,7 @@
             var card = e.target.closest('.card');
             if (!card) return;
             var symbol = card.dataset.symbol;
-            if (symbol) loadAndRender(symbol, activeRange, true);
+            if (symbol) loadAndRender(symbol, activeRange, activeInterval, true);
         });
 
         dom.cards.querySelectorAll('.card').forEach(function (card) {
@@ -570,7 +646,14 @@
             var btn = e.target.closest('.range-btn');
             if (!btn) return;
             var range = btn.dataset.range;
-            if (range) loadAndRender(activeSymbol, range, true);
+            if (range) loadAndRender(activeSymbol, range, activeInterval, true);
+        });
+
+        dom.intervalSelector.addEventListener('click', function (e) {
+            var btn = e.target.closest('.range-btn');
+            if (!btn) return;
+            var interval = btn.dataset.interval;
+            if (interval) loadAndRender(activeSymbol, activeRange, interval, true);
         });
     }
 
@@ -678,7 +761,7 @@
         if (defaultCard) defaultCard.classList.add('active');
 
         await initAllCards();
-        await loadAndRender('QQQ', '6mo', true);
+        await loadAndRender('QQQ', '6mo', '1d', true);
     }
 
     document.addEventListener('DOMContentLoaded', init);
