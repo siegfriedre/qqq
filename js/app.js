@@ -1096,10 +1096,15 @@
             function fmtMoney(v) { return '$' + Number(v).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
             function fmtCls(v) { return v >= 0 ? 'up' : 'down'; }
 
+            var winnerA = resultA.combined.totalReturnPct > resultB.combined.totalReturnPct;
+            var winnerB = resultB.combined.totalReturnPct > resultA.combined.totalReturnPct;
+
             function buildCard(r, key) {
                 var c = r.combined;
-                return '<div class="bt-summary-card ' + key + '">' +
-                    '<div class="bt-summary-title">[ ' + r.name + ' ] ' + r.stocks.map(function (s) { return s.symbol; }).join(' + ') + '</div>' +
+                var isWinner = (key === 'a' && winnerA) || (key === 'b' && winnerB);
+                var cls = key + (isWinner ? ' winner' : '');
+                return '<div class="bt-summary-card ' + cls + '">' +
+                    '<div class="bt-summary-title">[ ' + r.name + ' ] ' + r.stocks.map(function (s) { return s.symbol; }).join(' + ') + (isWinner ? ' <span class="bt-winner-badge">WINNER</span>' : '') + '</div>' +
                     '<div class="bt-summary-row"><span class="label">定投总投入</span><span class="value">' + fmtMoney(c.cashInvested.dca) + '</span></div>' +
                     '<div class="bt-summary-row"><span class="label">RSI加仓投入</span><span class="value">' + fmtMoney(c.cashInvested.rsi) + '</span></div>' +
                     '<div class="bt-summary-row"><span class="label">MA加仓投入</span><span class="value">' + fmtMoney(c.cashInvested.ma_buy) + '</span></div>' +

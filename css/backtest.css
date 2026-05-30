@@ -265,6 +265,22 @@
 }
 .bt-summary-card.a { border-left: 3px solid var(--cyan); }
 .bt-summary-card.b { border-left: 3px solid var(--magenta); }
+.bt-summary-card.winner {
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.15);
+}
+.bt-summary-card.a.winner { border-left: 3px solid var(--gold); }
+.bt-summary-card.b.winner { border-left: 3px solid var(--gold); }
+
+.bt-winner-badge {
+    font-size: 12px;
+    color: var(--gold);
+    background: rgba(255, 215, 0, 0.1);
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-left: 8px;
+    letter-spacing: 2px;
+}
 
 .bt-summary-title {
     font-family: 'Orbitron', sans-serif;
