@@ -122,24 +122,27 @@
 
         for (var i = 1; i < closes.length; i++) {
             var change = closes[i] - closes[i - 1];
-            if (i <= period) {
-                if (change > 0) gains += change;
-                else losses += Math.abs(change);
-                if (i < period) {
-                    result.push(null);
-                    continue;
-                }
+            var gain = change > 0 ? change : 0;
+            var loss = change < 0 ? -change : 0;
+
+            if (i < period) {
+                gains += gain;
+                losses += loss;
+                result.push(null);
+            } else if (i === period) {
+                gains += gain;
+                losses += loss;
                 var avgGain = gains / period;
                 var avgLoss = losses / period;
                 var rs = avgLoss === 0 ? 100 : avgGain / avgLoss;
                 result.push(100 - (100 / (1 + rs)));
+                gains = avgGain;
+                losses = avgLoss;
             } else {
-                var avgGain2 = (gains * (period - 1) + (change > 0 ? change : 0)) / period;
-                var avgLoss2 = (losses * (period - 1) + (change < 0 ? Math.abs(change) : 0)) / period;
-                gains = avgGain2 * period;
-                losses = avgLoss2 * period;
-                var rs2 = avgLoss2 === 0 ? 100 : avgGain2 / avgLoss2;
-                result.push(100 - (100 / (1 + rs2)));
+                gains = (gains * (period - 1) + gain) / period;
+                losses = (losses * (period - 1) + loss) / period;
+                var rs = losses === 0 ? 100 : gains / losses;
+                result.push(100 - (100 / (1 + rs)));
             }
         }
 
