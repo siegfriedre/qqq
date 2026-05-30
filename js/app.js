@@ -285,6 +285,9 @@
         const ma20Data = ma20.map(function (v, i) { return v != null ? [dates[i], v] : null; }).filter(Boolean);
         const ma60Data = ma60.map(function (v, i) { return v != null ? [dates[i], v] : null; }).filter(Boolean);
 
+        const ma120 = calcMA(closes, 120);
+        const ma120Data = ma120.map(function (v, i) { return v != null ? [dates[i], v] : null; }).filter(Boolean);
+
         const sma200 = calcMA(closes, 200);
         const sma200Data = sma200.map(function (v, i) { return v != null ? [dates[i], v] : null; }).filter(Boolean);
 
@@ -454,6 +457,17 @@
                     smooth: true,
                     symbol: 'none',
                     lineStyle: { width: 1, color: '#ff6b6b', opacity: 0.6 },
+                    emphasis: { focus: 'series' }
+                },
+                {
+                    name: 'MA120',
+                    type: 'line',
+                    xAxisIndex: 0,
+                    yAxisIndex: 0,
+                    data: ma120Data,
+                    smooth: true,
+                    symbol: 'none',
+                    lineStyle: { width: 1, color: '#ff9800', opacity: 0.7 },
                     emphasis: { focus: 'series' }
                 },
                 {
