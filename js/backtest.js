@@ -206,7 +206,7 @@ var Backtest = (function () {
         var lastPrice = filtered.closes[filtered.closes.length - 1];
         var currentValue = shares * lastPrice + rsiRebuyPool + maRebuyPool;
         var totalInvested = cashInvested.dca + cashInvested.rsi + cashInvested.ma_buy;
-        var netInvested = totalInvested - (cashInvested.ma_sell_rebuy + cashInvested.rsi_sell_rebuy);
+        var netInvested = totalInvested;
         var totalReturn = currentValue - netInvested;
         var totalReturnPct = netInvested > 0 ? (totalReturn / netInvested * 100) : 0;
 
@@ -247,7 +247,7 @@ var Backtest = (function () {
             dcaReturn: dcaReturn,
             rsiReturn: rsiReturn,
             maBuyReturn: maBuyReturn,
-            maSellProceeds: cashInvested.ma_sell_rebuy + cashInvested.rsi_sell_rebuy,
+            maSellProceeds: (cashInvested.ma_sell_rebuy || 0) + (cashInvested.rsi_sell_rebuy || 0),
             annuals: annuals
         };
     }
