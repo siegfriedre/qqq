@@ -1149,23 +1149,28 @@
 
             var stockDetailHtml = buildStockTable(resultA, 'a') + buildStockTable(resultB, 'b');
 
-            var allYears = {};
-            resultA.annuals.forEach(function (a) { allYears[a.year] = (allYears[a.year] || {}); allYears[a.year].a = a; });
-            resultB.annuals.forEach(function (a) { allYears[a.year] = (allYears[a.year] || {}); allYears[a.year].b = a; });
-            var years = Object.keys(allYears).sort();
+            var rows = [];
+            [resultA, resultB].forEach(function (r) {
+                r.stocks.forEach(function (s) {
+                    s.annuals.forEach(function (a) {
+                        rows.push({ strategy: r.name, symbol: s.symbol, year: a.year, dca: a.dca, dcaIn: a.dcaIn, rsi: a.rsi, rsiIn: a.rsiIn, maBuy: a.ma_buy, maSell: a.ma_sell });
+                    });
+                });
+            });
+            rows.sort(function (a, b) { return a.year.localeCompare(b.year) || a.strategy.localeCompare(b.strategy) || a.symbol.localeCompare(b.symbol); });
 
-            var table = '<table><thead><tr><th>年度</th><th>策略A 定投(次/金额)</th><th>策略A RSI(次/金额)</th><th>策略A MA(买/卖)</th><th>策略B 定投(次/金额)</th><th>策略B RSI(次/金额)</th><th>策略B MA(买/卖)</th></tr></thead><tbody>';
-            years.forEach(function (y) {
-                var aa = allYears[y].a || {};
-                var bb = allYears[y].b || {};
+            var table = '<table><thead><tr><th>年度</th><th>策略</th><th>股票</th><th>定投(次/金额)</th><th>RSI(次/金额)</th><th>MA(买/卖)</th></tr></thead><tbody>';
+            var lastYear = '';
+            rows.forEach(function (r) {
+                var yearCol = r.year !== lastYear ? '<td rowspan="' + rows.filter(function (x) { return x.year === r.year; }).length + '">' + r.year + '</td>' : '';
+                lastYear = r.year;
                 table += '<tr>' +
-                    '<td>' + y + '</td>' +
-                    '<td>' + (aa.dca || 0) + '次 / ' + fmtMoney(aa.dcaIn || 0) + '</td>' +
-                    '<td>' + (aa.rsi || 0) + '次 / ' + fmtMoney(aa.rsiIn || 0) + '</td>' +
-                    '<td>买' + (aa.ma_buy || 0) + '次 / 卖' + (aa.ma_sell || 0) + '次</td>' +
-                    '<td>' + (bb.dca || 0) + '次 / ' + fmtMoney(bb.dcaIn || 0) + '</td>' +
-                    '<td>' + (bb.rsi || 0) + '次 / ' + fmtMoney(bb.rsiIn || 0) + '</td>' +
-                    '<td>买' + (bb.ma_buy || 0) + '次 / 卖' + (bb.ma_sell || 0) + '次</td>' +
+                    yearCol +
+                    '<td>' + r.strategy + '</td>' +
+                    '<td><b>' + r.symbol + '</b></td>' +
+                    '<td>' + (r.dca || 0) + '次 / ' + fmtMoney(r.dcaIn || 0) + '</td>' +
+                    '<td>' + (r.rsi || 0) + '次 / ' + fmtMoney(r.rsiIn || 0) + '</td>' +
+                    '<td>买' + (r.maBuy || 0) + '次 / 卖' + (r.maSell || 0) + '次</td>' +
                     '</tr>';
             });
             table += '</tbody></table>';
