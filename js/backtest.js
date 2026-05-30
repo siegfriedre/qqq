@@ -148,14 +148,16 @@ var Backtest = (function () {
                 transactions.push({ date: toDateStr(ts), type: 'rsi_buy', price: price, shares: addShares, amount: cfg.rsiAdd.amount, cashFlow: -cfg.rsiAdd.amount });
             }
 
-            if (cfg.rsiSell && cfg.rsiSell.enabled && cfg.rsiSell.percent > 0 && rsi6[i] != null && rsiRebuyPool === 0 && rsi6[i] > cfg.rsiSell.threshold) {
+            if (cfg.rsiSell && cfg.rsiSell.enabled && cfg.rsiSell.percent > 0 && rsi6[i] != null && rsi6[i] > cfg.rsiSell.threshold && shares > 0) {
                 var rsiSellShares = shares * (cfg.rsiSell.percent / 100);
                 if (rsiSellShares > 0.0001) {
                     var rsiSellAmount = rsiSellShares * price;
                     shares -= rsiSellShares;
-                    rsiRebuyPool = rsiSellAmount;
                     cashInvested.rsi_sell_rebuy += rsiSellAmount;
                     transactions.push({ date: toDateStr(ts), type: 'rsi_sell', price: price, shares: rsiSellShares, amount: rsiSellAmount, cashFlow: +rsiSellAmount });
+                    if (cfg.rsiSell.rebuy) {
+                        rsiRebuyPool += rsiSellAmount;
+                    }
                 }
             }
 
@@ -182,14 +184,16 @@ var Backtest = (function () {
             if (cfg.maSell && cfg.maSell.enabled && i > 0) {
                 var maS = maMap[cfg.maSell.period];
                 if (maS && maS[i] != null && maS[i - 1] != null) {
-                    if (cfg.maSell.enabled && cfg.maSell.percent > 0 && filtered.closes[i - 1] >= maS[i - 1] && filtered.closes[i] < maS[i] && maRebuyPool === 0) {
+                    if (cfg.maSell.enabled && cfg.maSell.percent > 0 && filtered.closes[i - 1] >= maS[i - 1] && filtered.closes[i] < maS[i] && shares > 0) {
                         var sellShares = shares * (cfg.maSell.percent / 100);
                         if (sellShares > 0.0001) {
                             var sellAmount = sellShares * price;
                             shares -= sellShares;
-                            maRebuyPool = sellAmount;
                             cashInvested.ma_sell_rebuy += sellAmount;
                             transactions.push({ date: toDateStr(ts), type: 'ma_sell', price: price, shares: sellShares, amount: sellAmount, cashFlow: +sellAmount });
+                            if (cfg.maSell.rebuy) {
+                                maRebuyPool += sellAmount;
+                            }
                         }
                     }
                     if (cfg.maSell.rebuy && maRebuyPool > 0 && filtered.closes[i - 1] <= maS[i - 1] && filtered.closes[i] > maS[i]) {
