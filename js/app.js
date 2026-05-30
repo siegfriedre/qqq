@@ -130,8 +130,9 @@
 
         for (let i = 0; i < timestamps.length; i++) {
             if (opens[i] == null || highs[i] == null || lows[i] == null || closes[i] == null) continue;
-            ohlc.push([opens[i], closes[i], lows[i], highs[i]]);
-            dates.push(timestamps[i] * 1000);
+            const ts = timestamps[i] * 1000;
+            ohlc.push({ value: [ts, opens[i], closes[i], lows[i], highs[i]] });
+            dates.push(ts);
             cleanCloses.push(closes[i]);
             cleanVolumes.push(volumes[i] || 0);
         }
@@ -148,40 +149,48 @@
         const ma20 = calcMA(closes, 20);
         const ma60 = calcMA(closes, 60);
 
-        const isUp = closes.length >= 2 && closes[closes.length - 1] >= closes[closes.length - 2];
-        const accentColor = isUp ? '#00ff88' : '#ff3b5c';
-        const buyColor = '#00ff88';
-        const sellColor = '#ff3b5c';
+        const ma5Data = ma5.map(function (v, i) { return v != null ? [dates[i], v] : null; }).filter(Boolean);
+        const ma10Data = ma10.map(function (v, i) { return v != null ? [dates[i], v] : null; }).filter(Boolean);
+        const ma20Data = ma20.map(function (v, i) { return v != null ? [dates[i], v] : null; }).filter(Boolean);
+        const ma60Data = ma60.map(function (v, i) { return v != null ? [dates[i], v] : null; }).filter(Boolean);
 
-        const option = {
+        const volData = volumes.map(function (v, i) {
+            var open = ohlc[i] ? ohlc[i].value[1] : 0;
+            var close = ohlc[i] ? ohlc[i].value[2] : 0;
+            return {
+                value: [dates[i], v],
+                itemStyle: {
+                    color: close >= open ? 'rgba(0,255,136,0.5)' : 'rgba(255,59,92,0.5)',
+                    borderColor: close >= open ? '#00ff88' : '#ff3b5c',
+                    borderWidth: 0.5
+                }
+            };
+        });
+
+        var isUp = closes.length >= 2 && closes[closes.length - 1] >= closes[closes.length - 2];
+        var accentColor = isUp ? '#00ff88' : '#ff3b5c';
+
+        var option = {
             backgroundColor: 'transparent',
             grid: [
-                { left: '8%', right: '3%', top: '8%', height: '65%' },
-                { left: '8%', right: '3%', top: '80%', height: '15%' }
+                { left: '8%', right: '3%', top: '8%', height: '62%' },
+                { left: '8%', right: '3%', top: '78%', height: '16%' }
             ],
             xAxis: [
                 {
-                    type: 'category',
-                    data: dates,
+                    type: 'time',
                     gridIndex: 0,
                     axisLine: { lineStyle: { color: 'rgba(255,255,255,0.08)' } },
                     axisTick: { show: false },
                     axisLabel: {
                         color: '#6b7d95',
                         fontSize: 10,
-                        fontFamily: 'Share Tech Mono',
-                        formatter: function (val) {
-                            const d = new Date(val);
-                            const m = String(d.getMonth() + 1).padStart(2, '0');
-                            const day = String(d.getDate()).padStart(2, '0');
-                            return m + '/' + day;
-                        }
+                        fontFamily: 'Share Tech Mono'
                     },
                     splitLine: { show: false }
                 },
                 {
-                    type: 'category',
-                    data: dates,
+                    type: 'time',
                     gridIndex: 1,
                     axisLine: { lineStyle: { color: 'rgba(255,255,255,0.08)' } },
                     axisTick: { show: false },
@@ -222,10 +231,10 @@
                     yAxisIndex: 0,
                     data: ohlc,
                     itemStyle: {
-                        color: buyColor,
-                        color0: sellColor,
-                        borderColor: buyColor,
-                        borderColor0: sellColor,
+                        color: '#00ff88',
+                        color0: '#ff3b5c',
+                        borderColor: '#00ff88',
+                        borderColor0: '#ff3b5c',
                         borderWidth: 1
                     },
                     emphasis: {
@@ -242,7 +251,7 @@
                     type: 'line',
                     xAxisIndex: 0,
                     yAxisIndex: 0,
-                    data: ma5,
+                    data: ma5Data,
                     smooth: true,
                     symbol: 'none',
                     lineStyle: { width: 1, color: '#f5a623', opacity: 0.8 },
@@ -253,7 +262,7 @@
                     type: 'line',
                     xAxisIndex: 0,
                     yAxisIndex: 0,
-                    data: ma10,
+                    data: ma10Data,
                     smooth: true,
                     symbol: 'none',
                     lineStyle: { width: 1, color: '#b347ea', opacity: 0.8 },
@@ -264,7 +273,7 @@
                     type: 'line',
                     xAxisIndex: 0,
                     yAxisIndex: 0,
-                    data: ma20,
+                    data: ma20Data,
                     smooth: true,
                     symbol: 'none',
                     lineStyle: { width: 1, color: '#00d2ff', opacity: 0.8 },
@@ -275,7 +284,7 @@
                     type: 'line',
                     xAxisIndex: 0,
                     yAxisIndex: 0,
-                    data: ma60,
+                    data: ma60Data,
                     smooth: true,
                     symbol: 'none',
                     lineStyle: { width: 1, color: '#ff6b6b', opacity: 0.6 },
@@ -286,18 +295,7 @@
                     type: 'bar',
                     xAxisIndex: 1,
                     yAxisIndex: 1,
-                    data: volumes.map(function (v, i) {
-                        const open = ohlc[i] ? ohlc[i][0] : 0;
-                        const close = ohlc[i] ? ohlc[i][1] : 0;
-                        return {
-                            value: v,
-                            itemStyle: {
-                                color: close >= open ? 'rgba(0,255,136,0.5)' : 'rgba(255,59,92,0.5)',
-                                borderColor: close >= open ? '#00ff88' : '#ff3b5c',
-                                borderWidth: 0.5
-                            }
-                        };
-                    }),
+                    data: volData,
                     emphasis: { focus: 'series' }
                 }
             ],
@@ -325,23 +323,28 @@
                     fontSize: 11
                 },
                 formatter: function (params) {
-                    const d = new Date(params[0].axisValue);
-                    const dateStr = d.toLocaleDateString('zh-CN');
-                    let html = '<div style="padding:4px 0;color:#00f0ff;font-weight:bold;">' + dateStr + '</div>';
+                    var ts = params[0].axisValue;
+                    var d = ts ? new Date(ts) : new Date();
+                    var dateStr = d.getFullYear() + '/' +
+                        String(d.getMonth() + 1).padStart(2, '0') + '/' +
+                        String(d.getDate()).padStart(2, '0');
+                    var html = '<div style="padding:4px 0;color:#00f0ff;font-weight:bold;">' + dateStr + '</div>';
                     params.forEach(function (p) {
                         if (p.seriesName === 'Volume') {
+                            var v = p.value ? p.value[1] : 0;
                             html += '<div style="color:#6b7d95;">VOL: <span style="color:#c8d6e5;">' +
-                                formatVolume(p.value?.value || p.value) + '</span></div>';
+                                formatVolume(v) + '</span></div>';
                         } else if (p.seriesName === 'K线') {
-                            const d = p.data;
-                            html += '<div>O: <span style="color:#c8d6e5;">' + formatPrice(d[0]) + '</span> ' +
-                                'H: <span style="color:#00ff88;">' + formatPrice(d[3]) + '</span> ' +
-                                'L: <span style="color:#ff3b5c;">' + formatPrice(d[2]) + '</span> ' +
-                                'C: <span style="color:#c8d6e5;">' + formatPrice(d[1]) + '</span></div>';
+                            var d = p.value || p.data;
+                            html += '<div>O: <span style="color:#c8d6e5;">' + formatPrice(d[1]) + '</span> ' +
+                                'H: <span style="color:#00ff88;">' + formatPrice(d[4]) + '</span> ' +
+                                'L: <span style="color:#ff3b5c;">' + formatPrice(d[3]) + '</span> ' +
+                                'C: <span style="color:#c8d6e5;">' + formatPrice(d[2]) + '</span></div>';
                         } else if (p.value != null) {
+                            var v = Array.isArray(p.value) ? p.value[1] : p.value;
                             html += '<div><span style="color:' + p.color + ';">●</span> ' +
                                 p.seriesName + ': <span style="color:#c8d6e5;">' +
-                                formatPrice(p.value) + '</span></div>';
+                                formatPrice(v) + '</span></div>';
                         }
                     });
                     return html;
