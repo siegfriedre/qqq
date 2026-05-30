@@ -26,14 +26,14 @@
 
 .bt-title {
     font-family: 'Share Tech Mono', monospace;
-    font-size: 13px;
+    font-size: 15px;
     color: var(--cyan);
     letter-spacing: 3px;
 }
 
 .bt-toggle {
     font-family: 'Share Tech Mono', monospace;
-    font-size: 14px;
+    font-size: 16px;
     color: var(--text-dim);
 }
 
@@ -62,7 +62,7 @@
 
 .bt-field label {
     font-family: 'Share Tech Mono', monospace;
-    font-size: 11px;
+    font-size: 13px;
     color: var(--text-dim);
     letter-spacing: 2px;
 }
@@ -72,10 +72,10 @@
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.08);
     color: #c8d6e5;
-    padding: 7px 10px;
+    padding: 8px 12px;
     border-radius: 4px;
     font-family: 'Share Tech Mono', monospace;
-    font-size: 14px;
+    font-size: 16px;
     outline: none;
 }
 
@@ -151,10 +151,10 @@
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: #fff;
-    padding: 5px 10px;
+    padding: 6px 12px;
     border-radius: 3px;
     font-family: 'Orbitron', sans-serif;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 700;
     cursor: pointer;
     outline: none;
@@ -164,11 +164,11 @@
     background: none;
     border: 1px solid rgba(255,59,92,0.3);
     color: var(--red);
-    padding: 2px 8px;
+    padding: 4px 10px;
     border-radius: 3px;
     cursor: pointer;
     font-family: 'Share Tech Mono', monospace;
-    font-size: 10px;
+    font-size: 14px;
     opacity: 0.6;
     transition: opacity 0.2s;
 }
@@ -179,14 +179,21 @@
     background: none;
     border: 1px dashed rgba(255, 255, 255, 0.1);
     color: var(--text-dim);
-    padding: 6px 12px;
+    padding: 8px 14px;
     border-radius: 4px;
     cursor: pointer;
     font-family: 'Share Tech Mono', monospace;
-    font-size: 10px;
+    font-size: 13px;
     width: 100%;
     letter-spacing: 1px;
     transition: all 0.2s;
+}
+
+.bt-strategy-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 16px;
+    letter-spacing: 2px;
+    margin-bottom: 14px;
 }
 
 .bt-add-stock:hover {
@@ -211,13 +218,13 @@
 .bt-rule {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 4px;
-    padding: 7px 12px;
+    padding: 8px 14px;
     font-family: 'Share Tech Mono', monospace;
-    font-size: 12px;
+    font-size: 14px;
     color: var(--text-dim);
 }
 
@@ -225,11 +232,11 @@
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.08);
     color: #c8d6e5;
-    padding: 4px 7px;
+    padding: 5px 8px;
     border-radius: 3px;
     font-family: 'Share Tech Mono', monospace;
-    font-size: 12px;
-    width: 60px;
+    font-size: 14px;
+    width: 70px;
     outline: none;
 }
 
@@ -237,10 +244,10 @@
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.08);
     color: #c8d6e5;
-    padding: 4px 7px;
+    padding: 5px 8px;
     border-radius: 3px;
     font-family: 'Share Tech Mono', monospace;
-    font-size: 12px;
+    font-size: 14px;
     cursor: pointer;
     outline: none;
 }
@@ -286,9 +293,9 @@
     border: 1px solid var(--cyan);
     color: var(--cyan);
     font-family: 'Share Tech Mono', monospace;
-    font-size: 13px;
+    font-size: 16px;
     letter-spacing: 4px;
-    padding: 10px 30px;
+    padding: 12px 36px;
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.2s;
@@ -327,9 +334,86 @@
 
 .bt-summary-title {
     font-family: 'Orbitron', sans-serif;
-    font-size: 14px;
+    font-size: 16px;
     letter-spacing: 2px;
     margin-bottom: 14px;
+}
+
+.bt-summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    font-size: 15px;
+}
+
+.bt-summary-row .value {
+    font-family: 'Share Tech Mono', monospace;
+    color: #c8d6e5;
+    font-size: 16px;
+}
+
+.bt-summary-row.total {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 8px;
+    padding-top: 10px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.bt-stock-detail-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+.bt-stock-detail table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px;
+    min-width: 800px;
+}
+
+.bt-stock-detail th {
+    text-align: left;
+    color: var(--text-dim);
+    padding: 7px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    white-space: nowrap;
+    font-size: 14px;
+}
+
+.bt-stock-detail td {
+    padding: 6px 10px;
+    color: #c8d6e5;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    white-space: nowrap;
+    font-size: 15px;
+}
+
+.bt-annual table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px;
+}
+
+.bt-annual th {
+    text-align: left;
+    color: var(--text-dim);
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    letter-spacing: 1px;
+    font-size: 14px;
+}
+
+.bt-annual td {
+    padding: 7px 12px;
+    color: #c8d6e5;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    font-size: 15px;
 }
 
 .bt-summary-card.a .bt-summary-title { color: var(--cyan); }
