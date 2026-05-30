@@ -115,6 +115,37 @@
         return result;
     }
 
+    function calcRSI(closes, period) {
+        var result = [];
+        var gains = 0;
+        var losses = 0;
+
+        for (var i = 1; i < closes.length; i++) {
+            var change = closes[i] - closes[i - 1];
+            if (i <= period) {
+                if (change > 0) gains += change;
+                else losses += Math.abs(change);
+                if (i < period) {
+                    result.push(null);
+                    continue;
+                }
+                var avgGain = gains / period;
+                var avgLoss = losses / period;
+                var rs = avgLoss === 0 ? 100 : avgGain / avgLoss;
+                result.push(100 - (100 / (1 + rs)));
+            } else {
+                var avgGain2 = (gains * (period - 1) + (change > 0 ? change : 0)) / period;
+                var avgLoss2 = (losses * (period - 1) + (change < 0 ? Math.abs(change) : 0)) / period;
+                gains = avgGain2 * period;
+                losses = avgLoss2 * period;
+                var rs2 = avgLoss2 === 0 ? 100 : avgGain2 / avgLoss2;
+                result.push(100 - (100 / (1 + rs2)));
+            }
+        }
+
+        return result;
+    }
+
     function calcMaxDrawdown(closes) {
         if (!closes || closes.length < 2) return null;
         var peak = closes[0];
@@ -279,8 +310,70 @@
         var option = {
             backgroundColor: 'transparent',
             grid: [
-                { left: '8%', right: '3%', top: '8%', height: '58%' },
-                { left: '8%', right: '3%', top: '72%', height: '14%' }
+                { left: '8%', right: '3%', top: '8%', height: '48%' },
+                { left: '8%', right: '3%', top: '62%', height: '10%' },
+                { left: '8%', right: '3%', top: '78%', height: '16%' }
+            ],
+            xAxis: [
+                {
+                    type: 'time',
+                    gridIndex: 0,
+                    axisLine: { lineStyle: { color: 'rgba(255,255,255,0.08)' } },
+                    axisTick: { show: false },
+                    axisLabel: { color: '#6b7d95', fontSize: 10, fontFamily: 'Share Tech Mono' },
+                    splitLine: { show: false }
+                },
+                {
+                    type: 'time',
+                    gridIndex: 1,
+                    axisLine: { lineStyle: { color: 'rgba(255,255,255,0.08)' } },
+                    axisTick: { show: false },
+                    axisLabel: { show: false },
+                    splitLine: { show: false }
+                },
+                {
+                    type: 'time',
+                    gridIndex: 2,
+                    axisLine: { lineStyle: { color: 'rgba(255,255,255,0.08)' } },
+                    axisTick: { show: false },
+                    axisLabel: { color: '#6b7d95', fontSize: 10, fontFamily: 'Share Tech Mono' },
+                    splitLine: { show: false }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    gridIndex: 0,
+                    scale: true,
+                    splitNumber: 5,
+                    axisLine: { show: false },
+                    axisTick: { show: false },
+                    axisLabel: { color: '#6b7d95', fontSize: 10, fontFamily: 'Share Tech Mono',
+                        formatter: function (val) { return val.toFixed(2); } },
+                    splitLine: { lineStyle: { color: 'rgba(255,255,255,0.04)' } }
+                },
+                {
+                    type: 'value',
+                    gridIndex: 1,
+                    axisLine: { show: false },
+                    axisTick: { show: false },
+                    axisLabel: { show: false },
+                    splitLine: { show: false }
+                },
+                {
+                    type: 'value',
+                    gridIndex: 2,
+                    min: 0,
+                    max: 100,
+                    interval: 25,
+                    axisLine: { show: false },
+                    axisTick: { show: false },
+                    axisLabel: { color: '#6b7d95', fontSize: 9, fontFamily: 'Share Tech Mono' },
+                    splitLine: {
+                        lineStyle: { color: 'rgba(255,255,255,0.04)' },
+                        show: true
+                    }
+                }
             ],
             xAxis: [
                 {
@@ -414,12 +507,51 @@
                     yAxisIndex: 1,
                     data: volData,
                     emphasis: { focus: 'series' }
+                },
+                {
+                    name: 'RSI6',
+                    type: 'line',
+                    xAxisIndex: 2,
+                    yAxisIndex: 2,
+                    data: calcRSI(closes, 6).map(function (v, i) { return v != null ? [dates[i], v] : null; }).filter(Boolean),
+                    symbol: 'none',
+                    lineStyle: { width: 1, color: '#f5a623', opacity: 0.85 },
+                    emphasis: { focus: 'series' }
+                },
+                {
+                    name: 'RSI12',
+                    type: 'line',
+                    xAxisIndex: 2,
+                    yAxisIndex: 2,
+                    data: calcRSI(closes, 12).map(function (v, i) { return v != null ? [dates[i], v] : null; }).filter(Boolean),
+                    symbol: 'none',
+                    lineStyle: { width: 1, color: '#00d2ff', opacity: 0.85 },
+                    emphasis: { focus: 'series' }
+                },
+                {
+                    name: 'RSI24',
+                    type: 'line',
+                    xAxisIndex: 2,
+                    yAxisIndex: 2,
+                    data: calcRSI(closes, 24).map(function (v, i) { return v != null ? [dates[i], v] : null; }).filter(Boolean),
+                    symbol: 'none',
+                    lineStyle: { width: 1, color: '#b347ea', opacity: 0.85 },
+                    emphasis: { focus: 'series' },
+                    markLine: {
+                        silent: true,
+                        symbol: 'none',
+                        lineStyle: { type: 'dashed', width: 0.5 },
+                        data: [
+                            { yAxis: 30, lineStyle: { color: 'rgba(0,255,136,0.3)' }, label: { show: false } },
+                            { yAxis: 70, lineStyle: { color: 'rgba(255,59,92,0.3)' }, label: { show: false } }
+                        ]
+                    }
                 }
             ],
             dataZoom: [
                 {
                     type: 'inside',
-                    xAxisIndex: [0, 1],
+                    xAxisIndex: [0, 1, 2],
                     start: 70,
                     end: 100,
                     zoomOnMouseWheel: true,
@@ -428,7 +560,7 @@
                 },
                 {
                     type: 'slider',
-                    xAxisIndex: [0, 1],
+                    xAxisIndex: [0, 1, 2],
                     start: 70,
                     end: 100,
                     height: 22,
