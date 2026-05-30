@@ -4,7 +4,7 @@ import urllib.request
 import time
 
 SYMBOLS = ['QQQ', 'TQQQ', 'SMH', 'VGT']
-RANGES = ['5d', '1mo', '3mo', '6mo', '1y', '5y']
+RANGES = ['5d', '1mo', '3mo', '6mo', '1y', '5y', 'max']
 DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data')
 API_BASE = 'https://query1.finance.yahoo.com/v8/finance/chart/'
 
