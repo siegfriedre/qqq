@@ -152,9 +152,34 @@
     padding: 8px 10px;
     border-radius: 3px;
     font-family: 'Share Tech Mono', monospace;
-    font-size: 18px;
+    font-size: 20px;
     width: 100px;
     outline: none;
+}
+
+.bt-rule select {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #c8d6e5;
+    padding: 8px 10px;
+    border-radius: 3px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 20px;
+    cursor: pointer;
+    outline: none;
+}
+
+.bt-rule {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    padding: 10px 16px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 19px;
+    color: var(--text-dim);
 }
 
 .bt-rule select {
