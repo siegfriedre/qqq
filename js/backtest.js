@@ -146,10 +146,9 @@ var Backtest = (function () {
             }
 
             if (cfg.maAdd && cfg.maAdd.enabled && i > 0) {
-                var maS = maMap[cfg.maAdd.short];
-                var maL = maMap[cfg.maAdd.long];
-                if (maS && maL && maS[i] != null && maL[i] != null && maS[i - 1] != null && maL[i - 1] != null) {
-                    if (maS[i - 1] <= maL[i - 1] && maS[i] > maL[i]) {
+                var maA = maMap[cfg.maAdd.period];
+                if (maA && maA[i] != null && maA[i - 1] != null) {
+                    if (filtered.closes[i - 1] <= maA[i - 1] && filtered.closes[i] > maA[i]) {
                         var maAddShares = cfg.maAdd.amount / price;
                         shares += maAddShares;
                         cashInvested.ma_buy += cfg.maAdd.amount;
@@ -159,10 +158,9 @@ var Backtest = (function () {
             }
 
             if (cfg.maSell && cfg.maSell.enabled && i > 0) {
-                var maSS = maMap[cfg.maSell.short];
-                var maLL = maMap[cfg.maSell.long];
-                if (maSS && maLL && maSS[i] != null && maLL[i] != null && maSS[i - 1] != null && maLL[i - 1] != null) {
-                    if (maSS[i - 1] >= maLL[i - 1] && maSS[i] < maLL[i]) {
+                var maS = maMap[cfg.maSell.period];
+                if (maS && maS[i] != null && maS[i - 1] != null) {
+                    if (filtered.closes[i - 1] >= maS[i - 1] && filtered.closes[i] < maS[i]) {
                     var sellShares = shares * (cfg.maSell.percent / 100);
                     if (sellShares > 0.0001) {
                         var sellAmount = sellShares * price;

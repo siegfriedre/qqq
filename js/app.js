@@ -950,8 +950,8 @@
                 '<div class="bt-stock-rules">' +
                 '<label class="bt-rule"><input type="checkbox" class="bt-rsi-add-ck" ' + rsiChecked + '> RSI6 &lt; <input type="number" class="bt-rsi-add-val" value="' + ((s.rsiAdd && s.rsiAdd.threshold) || 30) + '" min="1" max="99"> 加仓 <input type="number" class="bt-rsi-add-amt" value="' + ((s.rsiAdd && s.rsiAdd.amount) || 2000) + '" min="0"></label>' +
                 '<label class="bt-rule"><input type="checkbox" class="bt-rsi-pause-ck" ' + rsiPauseChecked + '> RSI6 &gt; <input type="number" class="bt-rsi-pause-val" value="' + ((s.rsiPause && s.rsiPause.threshold) || 70) + '" min="1" max="99"> 暂停定投</label>' +
-                '<label class="bt-rule"><input type="checkbox" class="bt-ma-add-ck" ' + maAddChecked + '> <select class="bt-ma-add-ma"><option value="5">MA5</option><option value="10">MA10</option><option value="20">MA20</option><option value="60">MA60</option><option value="120">MA120</option><option value="200">MA200</option></select> 上穿 <select class="bt-ma-add-base"><option value="10">MA10</option><option value="20" selected>MA20</option><option value="60">MA60</option><option value="120">MA120</option><option value="200">MA200</option></select> 加仓 <input type="number" class="bt-ma-add-amt" value="' + ((s.maAdd && s.maAdd.amount) || 2000) + '" min="0"></label>' +
-                '<label class="bt-rule"><input type="checkbox" class="bt-ma-sell-ck" ' + maSellChecked + '> <select class="bt-ma-sell-ma"><option value="5">MA5</option><option value="10">MA10</option><option value="20">MA20</option><option value="60">MA60</option><option value="120">MA120</option><option value="200">MA200</option></select> 下穿 <select class="bt-ma-sell-base"><option value="10">MA10</option><option value="20" selected>MA20</option><option value="60">MA60</option><option value="120">MA120</option><option value="200">MA200</option></select> 卖出 <input type="number" class="bt-ma-sell-pct" value="' + ((s.maSell && s.maSell.percent) || 50) + '" min="1" max="100"> %</label>' +
+                '<label class="bt-rule"><input type="checkbox" class="bt-ma-add-ck" ' + maAddChecked + '> 收盘价 上穿 <select class="bt-ma-add-ma"><option value="5">MA5</option><option value="10">MA10</option><option value="20">MA20</option><option value="60">MA60</option><option value="120">MA120</option><option value="200">MA200</option></select> 加仓 <input type="number" class="bt-ma-add-amt" value="' + ((s.maAdd && s.maAdd.amount) || 2000) + '" min="0"></label>' +
+                '<label class="bt-rule"><input type="checkbox" class="bt-ma-sell-ck" ' + maSellChecked + '> 收盘价 下穿 <select class="bt-ma-sell-ma"><option value="5">MA5</option><option value="10">MA10</option><option value="20">MA20</option><option value="60">MA60</option><option value="120">MA120</option><option value="200">MA200</option></select> 卖出 <input type="number" class="bt-ma-sell-pct" value="' + ((s.maSell && s.maSell.percent) || 50) + '" min="1" max="100"> %</label>' +
                 '</div>' +
                 '</div>';
         }
@@ -999,16 +999,14 @@
             var maAddCk = row.querySelector('.bt-ma-add-ck');
             var maAdd = maAddCk && maAddCk.checked ? {
                 enabled: true,
-                short: parseInt(row.querySelector('.bt-ma-add-ma').value),
-                long: parseInt(row.querySelector('.bt-ma-add-base').value),
+                period: parseInt(row.querySelector('.bt-ma-add-ma').value),
                 amount: parseFloat(row.querySelector('.bt-ma-add-amt').value) || 2000
             } : null;
 
             var maSellCk = row.querySelector('.bt-ma-sell-ck');
             var maSell = maSellCk && maSellCk.checked ? {
                 enabled: true,
-                short: parseInt(row.querySelector('.bt-ma-sell-ma').value),
-                long: parseInt(row.querySelector('.bt-ma-sell-base').value),
+                period: parseInt(row.querySelector('.bt-ma-sell-ma').value),
                 percent: parseFloat(row.querySelector('.bt-ma-sell-pct').value) || 50
             } : null;
 
