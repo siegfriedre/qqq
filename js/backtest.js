@@ -161,12 +161,13 @@ var Backtest = (function () {
                 var maS = maMap[cfg.maSell.period];
                 if (maS && maS[i] != null && maS[i - 1] != null) {
                     if (filtered.closes[i - 1] >= maS[i - 1] && filtered.closes[i] < maS[i]) {
-                    var sellShares = shares * (cfg.maSell.percent / 100);
-                    if (sellShares > 0.0001) {
-                        var sellAmount = sellShares * price;
-                        shares -= sellShares;
-                        cashInvested.ma_sell_proceeds += sellAmount;
-                        transactions.push({ date: toDateStr(ts), type: 'ma_sell', price: price, shares: sellShares, amount: sellAmount, cashFlow: +sellAmount });
+                        var sellShares = shares * (cfg.maSell.percent / 100);
+                        if (sellShares > 0.0001) {
+                            var sellAmount = sellShares * price;
+                            shares -= sellShares;
+                            cashInvested.ma_sell_proceeds += sellAmount;
+                            transactions.push({ date: toDateStr(ts), type: 'ma_sell', price: price, shares: sellShares, amount: sellAmount, cashFlow: +sellAmount });
+                        }
                     }
                 }
             }
