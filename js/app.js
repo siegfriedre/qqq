@@ -515,17 +515,21 @@
                 {
                     type: 'inside',
                     xAxisIndex: [0, 1, 2],
-                    start: 70,
+                    start: 80,
                     end: 100,
                     zoomOnMouseWheel: true,
                     moveOnMouseMove: true,
-                    moveOnMouseWheel: false
+                    moveOnMouseWheel: false,
+                    minSpan: 1,
+                    maxSpan: 100
                 },
                 {
                     type: 'slider',
                     xAxisIndex: [0, 1, 2],
-                    start: 70,
+                    start: 80,
                     end: 100,
+                    minSpan: 1,
+                    maxSpan: 100,
                     height: 22,
                     bottom: 8,
                     borderColor: 'rgba(255,255,255,0.06)',
@@ -616,6 +620,7 @@
             }
         };
 
+        mainChart.clear();
         mainChart.setOption(option, true);
     }
 
