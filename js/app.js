@@ -1126,7 +1126,7 @@
                     '<div class="bt-summary-row"><span class="label">RSI卖/买回</span><span class="value">' + fmtMoney(c.cashInvested.rsi_sell_rebuy) + '</span></div>' +
                     '<div class="bt-summary-row"><span class="label">MA加仓投入</span><span class="value">' + fmtMoney(c.cashInvested.ma_buy) + '</span></div>' +
                     '<div class="bt-summary-row"><span class="label">MA卖/买回</span><span class="value">' + fmtMoney(c.cashInvested.ma_sell_rebuy) + '</span></div>' +
-                    '<div class="bt-summary-row"><span class="label">现金</span><span class="value">' + fmtMoney(c.rebuyCash || 0) + '</span></div>' +
+                    ((c.rebuyCash || 0) > 0 ? '<div class="bt-summary-row"><span class="label">现金</span><span class="value">' + fmtMoney(c.rebuyCash) + '</span></div>' : '') +
                     '<div class="bt-summary-row total"><span class="label">当前市值</span><span class="value">' + fmtMoney(c.currentValue) + '</span></div>' +
                     '<div class="bt-summary-row"><span class="label">净投入</span><span class="value">' + fmtMoney(c.netInvested) + '</span></div>' +
                     '<div class="bt-summary-row"><span class="label">总收益</span><span class="value ' + fmtCls(c.totalReturn) + '">' + fmtMoney(c.totalReturn) + ' (' + fmtPct(c.totalReturnPct) + ')</span></div>' +
