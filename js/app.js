@@ -1027,29 +1027,61 @@
             var html = buildStrategyUI('a') + buildStrategyUI('b');
             document.getElementById('btStrategies').innerHTML = html;
 
+            bindAddButtons();
+            bindRemoveButtons();
+            bindSymbolChanges();
+        }
+
+        function bindAddButtons() {
             document.querySelectorAll('.bt-add-stock').forEach(function (btn) {
-                btn.addEventListener('click', function () {
-                    var key = this.dataset.strategy;
-                    var s = getStrategy(key);
-                    s.stocks.push({ symbol: 'QQQ', method: 'dca', dcaPeriod: 'monthly', dcaAmount: 1000 });
-                    refreshUI();
-                });
+                btn.removeEventListener('click', addStockHandler);
+                btn.addEventListener('click', addStockHandler);
             });
+        }
 
+        function addStockHandler() {
+            var key = this.dataset.strategy;
+            var container = document.getElementById('btStocks' + key.toUpperCase());
+            var s = getStrategy(key);
+            var idx = s.stocks.length;
+            s.stocks.push({ symbol: 'QQQ', method: 'dca', dcaPeriod: 'monthly', dcaAmount: 1000 });
+            var rowHtml = buildStockRow(s, idx);
+            var div = document.createElement('div');
+            div.innerHTML = rowHtml;
+            container.appendChild(div.firstElementChild);
+            bindSingleRemove(container.lastElementChild);
+        }
+
+        function bindRemoveButtons() {
             document.querySelectorAll('.bt-remove').forEach(function (btn) {
-                btn.addEventListener('click', function () {
-                    var row = this.closest('.bt-stock-row');
-                    var strategyDiv = this.closest('.bt-strategy');
-                    var key = strategyDiv.classList.contains('bt-a') ? 'a' : 'b';
-                    var container = document.getElementById('btStocks' + key.toUpperCase());
-                    var rows = container.querySelectorAll('.bt-stock-row');
-                    var idx = Array.prototype.indexOf.call(rows, row);
-                    if (idx >= 0) getStrategy(key).stocks.splice(idx, 1);
-                    refreshUI();
-                });
+                btn.removeEventListener('click', removeStockHandler);
+                btn.addEventListener('click', removeStockHandler);
             });
+        }
 
+        function bindSingleRemove(row) {
+            var btn = row.querySelector('.bt-remove');
+            if (btn) {
+                btn.removeEventListener('click', removeStockHandler);
+                btn.addEventListener('click', removeStockHandler);
+            }
+        }
+
+        function removeStockHandler() {
+            var row = this.closest('.bt-stock-row');
+            if (!row) return;
+            var strategyDiv = this.closest('.bt-strategy');
+            var key = strategyDiv.classList.contains('bt-a') ? 'a' : 'b';
+            var container = document.getElementById('btStocks' + key.toUpperCase());
+            var rows = container.querySelectorAll('.bt-stock-row');
+            var idx = Array.prototype.indexOf.call(rows, row);
+            if (idx >= 0) getStrategy(key).stocks.splice(idx, 1);
+            row.remove();
+        }
+
+        function bindSymbolChanges() {
             document.querySelectorAll('.bt-stock-symbol').forEach(function (sel) {
+                sel.removeEventListener('change', function () {});
                 sel.addEventListener('change', function () {});
             });
         }
