@@ -248,6 +248,7 @@ var Backtest = (function () {
             rsiReturn: rsiReturn,
             maBuyReturn: maBuyReturn,
             maSellProceeds: (cashInvested.ma_sell_rebuy || 0) + (cashInvested.rsi_sell_rebuy || 0),
+            rebuyCash: rsiRebuyPool + maRebuyPool,
             annuals: annuals
         };
     }
@@ -256,7 +257,7 @@ var Backtest = (function () {
         var results = [];
         var combined = {
             totalInvested: 0, netInvested: 0, currentValue: 0, totalReturn: 0, totalReturnPct: 0,
-            dcaReturn: 0, rsiReturn: 0, maBuyReturn: 0, maSellProceeds: 0,
+            dcaReturn: 0, rsiReturn: 0, maBuyReturn: 0, maSellProceeds: 0, rebuyCash: 0,
             cashInvested: { dca: 0, rsi: 0, ma_buy: 0, ma_sell_rebuy: 0, rsi_sell_rebuy: 0 },
             stocks: []
         };
@@ -294,6 +295,7 @@ var Backtest = (function () {
             combined.cashInvested.ma_buy += r.cashInvested.ma_buy;
             combined.cashInvested.ma_sell_rebuy += r.cashInvested.ma_sell_rebuy;
             combined.cashInvested.rsi_sell_rebuy += r.cashInvested.rsi_sell_rebuy;
+            combined.rebuyCash = (combined.rebuyCash || 0) + (r.rebuyCash || 0);
             combined.dcaReturn += r.dcaReturn;
             combined.rsiReturn += r.rsiReturn;
             combined.maBuyReturn += r.maBuyReturn;
