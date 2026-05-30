@@ -445,129 +445,124 @@ body {
 
 @media (max-width: 768px) {
     .container {
-        padding: 10px 12px 20px;
+        padding: 8px 10px 20px;
     }
     .header {
         flex-direction: column;
         align-items: flex-start;
-        gap: 10px;
-        padding: 12px 0 16px;
-        margin-bottom: 16px;
+        gap: 6px;
+        padding: 10px 0 12px;
+        margin-bottom: 12px;
     }
     .header-right {
         width: 100%;
         justify-content: flex-start;
     }
     .title {
-        font-size: 1.2rem;
+        font-size: 1rem;
         letter-spacing: 3px;
     }
     .subtitle {
-        font-size: 10px;
+        font-size: 9px;
         letter-spacing: 2px;
     }
     .clock {
-        font-size: 1.1rem;
-    }
-    .stock-cards {
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-        margin-bottom: 16px;
-    }
-    .card {
-        padding: 12px;
-    }
-    .card-symbol {
-        font-size: 1.1rem;
-    }
-    .card-price {
-        font-size: 1.2rem;
-    }
-    .card-change {
-        font-size: 0.8rem;
-    }
-    .chart-panel {
-        padding: 12px;
-    }
-    .chart-container {
-        height: 360px;
-    }
-    .panel-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-        margin-bottom: 8px;
-    }
-    .interval-selector {
-        flex-wrap: wrap;
-    }
-    .panel-title {
-        font-size: 11px;
-        letter-spacing: 2px;
-    }
-    .range-btn {
-        font-size: 10px;
-        padding: 4px 10px;
-    }
-    .stats-row {
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-        margin-bottom: 16px;
-    }
-    .stat-card {
-        padding: 10px 14px;
-    }
-    .stat-value {
         font-size: 1rem;
     }
-    .stat-label {
-        font-size: 9px;
-        letter-spacing: 2px;
-    }
-    .footer span {
-        font-size: 9px;
-    }
-}
-
-@media (max-width: 480px) {
     .stock-cards {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(3, 1fr);
         gap: 6px;
+        margin-bottom: 12px;
     }
     .card {
         padding: 10px;
     }
     .card-symbol {
-        font-size: 1rem;
-        letter-spacing: 1px;
+        font-size: 0.95rem;
     }
     .card-name {
-        font-size: 9px;
+        font-size: 8px;
     }
     .card-price {
         font-size: 1rem;
     }
     .card-change {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
+    }
+    .chart-panel {
+        padding: 10px;
     }
     .chart-container {
         height: 300px;
     }
+    .panel-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        margin-bottom: 6px;
+    }
+    .interval-selector {
+        flex-wrap: wrap;
+    }
+    .panel-title {
+        font-size: 10px;
+        letter-spacing: 2px;
+    }
+    .range-btn {
+        font-size: 9px;
+        padding: 4px 8px;
+    }
     .stats-row {
         grid-template-columns: 1fr 1fr;
         gap: 6px;
+        margin-bottom: 12px;
     }
     .stat-card {
         padding: 8px 10px;
     }
-    .stat-label {
-        font-size: 8px;
-    }
     .stat-value {
         font-size: 0.9rem;
     }
-    .range-btn {
-        font-size: 9px;
-        padding: 3px 8px;
+    .stat-label {
+        font-size: 8px;
+        letter-spacing: 1px;
     }
+    .footer span {
+        font-size: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 6px 8px 16px;
+    }
+    .title { font-size: 0.85rem; letter-spacing: 2px; }
+    .stock-cards {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+    }
+    .card {
+        padding: 8px;
+    }
+    .card-header { margin-bottom: 6px; }
+    .card-symbol { font-size: 0.8rem; letter-spacing: 1px; }
+    .card-name { font-size: 7px; }
+    .card-price { font-size: 0.85rem; margin-bottom: 2px; }
+    .card-change { font-size: 0.65rem; }
+    .chart-container { height: 240px; }
+    .stats-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 4px;
+        margin-bottom: 10px;
+    }
+    .stat-card { padding: 6px 8px; }
+    .stat-label { font-size: 7px; letter-spacing: 1px; }
+    .stat-value { font-size: 0.8rem; }
+    .range-btn { font-size: 8px; padding: 3px 6px; }
+    .bt-stock-detail table { font-size: 12px; min-width: 600px; }
+    .bt-stock-detail th { font-size: 12px; padding: 5px 6px; }
+    .bt-stock-detail td { font-size: 13px; padding: 4px 6px; }
+    .bt-annual table { font-size: 12px; }
+    .bt-annual th { font-size: 12px; padding: 5px 6px; }
+    .bt-annual td { font-size: 13px; padding: 4px 6px; }
 }
