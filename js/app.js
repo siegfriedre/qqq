@@ -570,10 +570,10 @@
                                 formatVolume(v) + '</span></div>';
                         } else if (p.seriesName === 'K线') {
                             var d = p.value || p.data;
-                            html += '<div>O: <span style="color:#c8d6e5;">' + formatPrice(d[1]) + '</span> ' +
-                                'H: <span style="color:#00ff88;">' + formatPrice(d[4]) + '</span> ' +
-                                'L: <span style="color:#ff3b5c;">' + formatPrice(d[3]) + '</span> ' +
-                                'C: <span style="color:#c8d6e5;">' + formatPrice(d[2]) + '</span></div>';
+                            html += '<div>开: <span style="color:#c8d6e5;">' + formatPrice(d[1]) + '</span> ' +
+                                '高: <span style="color:#00ff88;">' + formatPrice(d[4]) + '</span> ' +
+                                '低: <span style="color:#ff3b5c;">' + formatPrice(d[3]) + '</span> ' +
+                                '收: <span style="color:#c8d6e5;">' + formatPrice(d[2]) + '</span></div>';
                         } else if (/^RSI/.test(p.seriesName)) {
                             var v = Array.isArray(p.value) ? p.value[1] : p.value;
                             html += '<div><span style="color:' + p.color + ';">●</span> ' +
