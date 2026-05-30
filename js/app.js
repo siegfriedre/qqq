@@ -1115,6 +1115,40 @@
 
             summaryDiv.innerHTML = buildCard(resultA, 'a') + buildCard(resultB, 'b');
 
+            function buildStockTable(r, key) {
+                if (!r.stocks.length) return '';
+                var cls = key === 'a' ? 'bt-a' : 'bt-b';
+                var html = '<div class="bt-stock-detail ' + cls + '"><div class="bt-stock-detail-title">[ ' + r.name + ' ] 各股票明细</div><table>' +
+                    '<thead><tr><th>股票</th><th>持仓(股)</th><th>现价</th><th>市值</th><th>定投投入</th><th>定投次数</th><th>RSI加仓</th><th>RSI次数</th><th>MA加仓</th><th>MA卖出</th><th>总收益</th></tr></thead><tbody>';
+                r.stocks.forEach(function (s) {
+                    var dcaCount = 0, rsiCount = 0, maBuyCount = 0, maSellCount = 0;
+                    s.transactions.forEach(function (t) {
+                        if (t.type === 'dca') dcaCount++;
+                        if (t.type === 'rsi_buy') rsiCount++;
+                        if (t.type === 'ma_buy') maBuyCount++;
+                        if (t.type === 'ma_sell') maSellCount++;
+                    });
+                    var sReturn = s.currentValue - (s.totalInvested - s.maSellProceeds);
+                    html += '<tr>' +
+                        '<td><b>' + s.symbol + '</b></td>' +
+                        '<td>' + Number(s.shares).toFixed(3) + '</td>' +
+                        '<td>' + fmtMoney(s.lastPrice) + '</td>' +
+                        '<td>' + fmtMoney(s.currentValue) + '</td>' +
+                        '<td>' + fmtMoney(s.cashInvested.dca) + '</td>' +
+                        '<td>' + dcaCount + '</td>' +
+                        '<td>' + fmtMoney(s.cashInvested.rsi) + '</td>' +
+                        '<td>' + rsiCount + '</td>' +
+                        '<td>' + fmtMoney(s.cashInvested.ma_buy) + '</td>' +
+                        '<td>' + fmtMoney(s.cashInvested.ma_sell_proceeds) + '</td>' +
+                        '<td class="' + fmtCls(sReturn) + '">' + fmtMoney(sReturn) + '</td>' +
+                        '</tr>';
+                });
+                html += '</tbody></table></div>';
+                return html;
+            }
+
+            var stockDetailHtml = buildStockTable(resultA, 'a') + buildStockTable(resultB, 'b');
+
             var allYears = {};
             resultA.annuals.forEach(function (a) { allYears[a.year] = (allYears[a.year] || {}); allYears[a.year].a = a; });
             resultB.annuals.forEach(function (a) { allYears[a.year] = (allYears[a.year] || {}); allYears[a.year].b = a; });
@@ -1135,7 +1169,7 @@
                     '</tr>';
             });
             table += '</tbody></table>';
-            annualDiv.innerHTML = table;
+            annualDiv.innerHTML = stockDetailHtml + table;
         }
 
         document.getElementById('btRun').addEventListener('click', async function () {

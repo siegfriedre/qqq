@@ -362,6 +362,48 @@
 .bt-annual td.up { color: var(--green); }
 .bt-annual td.down { color: var(--red); }
 
+.bt-stock-detail {
+    margin-bottom: 16px;
+    overflow-x: auto;
+}
+
+.bt-stock-detail-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+.bt-stock-detail.bt-a .bt-stock-detail-title { color: var(--cyan); }
+.bt-stock-detail.bt-b .bt-stock-detail-title { color: var(--magenta); }
+
+.bt-stock-detail table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    min-width: 800px;
+}
+
+.bt-stock-detail th {
+    text-align: left;
+    color: var(--text-dim);
+    padding: 5px 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    white-space: nowrap;
+}
+
+.bt-stock-detail td {
+    padding: 4px 8px;
+    color: #c8d6e5;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    white-space: nowrap;
+}
+
+.bt-stock-detail td.up { color: var(--green); }
+.bt-stock-detail td.down { color: var(--red); }
+
 @media (max-width: 768px) {
     .bt-strategies {
         grid-template-columns: 1fr;
