@@ -102,6 +102,10 @@ var Backtest = (function () {
         var ma10 = calcMA(filtered.closes, 10);
         var ma20 = calcMA(filtered.closes, 20);
         var ma60 = calcMA(filtered.closes, 60);
+        var ma120 = calcMA(filtered.closes, 120);
+        var ma200 = calcMA(filtered.closes, 200);
+
+        var maMap = { 5: ma5, 10: ma10, 20: ma20, 60: ma60, 120: ma120, 200: ma200 };
 
         var shares = 0;
         var cashInvested = { dca: 0, rsi: 0, ma_buy: 0, ma_sell_proceeds: 0 };
@@ -141,17 +145,24 @@ var Backtest = (function () {
                 transactions.push({ date: toDateStr(ts), type: 'rsi_buy', price: price, shares: addShares, amount: cfg.rsiAdd.amount, cashFlow: -cfg.rsiAdd.amount });
             }
 
-            if (cfg.maAdd && cfg.maAdd.enabled && i > 0 && ma5[i] != null && ma20[i] != null && ma5[i - 1] != null && ma20[i - 1] != null) {
-                if (ma5[i - 1] <= ma20[i - 1] && ma5[i] > ma20[i]) {
-                    var maAddShares = cfg.maAdd.amount / price;
-                    shares += maAddShares;
-                    cashInvested.ma_buy += cfg.maAdd.amount;
-                    transactions.push({ date: toDateStr(ts), type: 'ma_buy', price: price, shares: maAddShares, amount: cfg.maAdd.amount, cashFlow: -cfg.maAdd.amount });
+            if (cfg.maAdd && cfg.maAdd.enabled && i > 0) {
+                var maS = maMap[cfg.maAdd.short];
+                var maL = maMap[cfg.maAdd.long];
+                if (maS && maL && maS[i] != null && maL[i] != null && maS[i - 1] != null && maL[i - 1] != null) {
+                    if (maS[i - 1] <= maL[i - 1] && maS[i] > maL[i]) {
+                        var maAddShares = cfg.maAdd.amount / price;
+                        shares += maAddShares;
+                        cashInvested.ma_buy += cfg.maAdd.amount;
+                        transactions.push({ date: toDateStr(ts), type: 'ma_buy', price: price, shares: maAddShares, amount: cfg.maAdd.amount, cashFlow: -cfg.maAdd.amount });
+                    }
                 }
             }
 
-            if (cfg.maSell && cfg.maSell.enabled && i > 0 && ma5[i] != null && ma20[i] != null && ma5[i - 1] != null && ma20[i - 1] != null) {
-                if (ma5[i - 1] >= ma20[i - 1] && ma5[i] < ma20[i]) {
+            if (cfg.maSell && cfg.maSell.enabled && i > 0) {
+                var maSS = maMap[cfg.maSell.short];
+                var maLL = maMap[cfg.maSell.long];
+                if (maSS && maLL && maSS[i] != null && maLL[i] != null && maSS[i - 1] != null && maLL[i - 1] != null) {
+                    if (maSS[i - 1] >= maLL[i - 1] && maSS[i] < maLL[i]) {
                     var sellShares = shares * (cfg.maSell.percent / 100);
                     if (sellShares > 0.0001) {
                         var sellAmount = sellShares * price;
