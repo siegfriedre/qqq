@@ -2,6 +2,7 @@
     'use strict';
 
     const SYMBOLS = ['QQQ', 'TQQQ', 'SMH', 'VGT'];
+    const BT_SYMBOLS = ['QQQ', 'TQQQ', 'SMH', 'VGT', 'SGOV'];
     const CACHE_KEY = 'stock_data_cache';
     const CACHE_EXPIRY = 4 * 60 * 60 * 1000;
     const CHART_THEME = {
@@ -921,7 +922,7 @@
 
         function buildStockRow(strategy, stockIdx) {
             var s = strategy.stocks[stockIdx] || {};
-            var opts = SYMBOLS.map(function (sym) {
+            var opts = BT_SYMBOLS.map(function (sym) {
                 return '<option value="' + sym + '"' + (s.symbol === sym ? ' selected' : '') + '>' + sym + '</option>';
             }).join('');
 
@@ -1060,7 +1061,7 @@
             resultsDiv.classList.add('show');
 
             function fmtPct(v) { return (v >= 0 ? '+' : '') + v.toFixed(2) + '%'; }
-            function fmtMoney(v) { return '¥' + Number(v).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+            function fmtMoney(v) { return '$' + Number(v).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
             function fmtCls(v) { return v >= 0 ? 'up' : 'down'; }
 
             function buildCard(r, key) {

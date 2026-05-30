@@ -1,0 +1,126 @@
+{
+  "chart": {
+    "result": [
+      {
+        "meta": {
+          "currency": "USD",
+          "symbol": "SGOV",
+          "exchangeName": "NYQ",
+          "fullExchangeName": "NYSE",
+          "instrumentType": "ETF",
+          "firstTradeDate": 1591018200,
+          "regularMarketTime": 1780084814,
+          "hasPrePostMarketData": true,
+          "gmtoffset": -14400,
+          "timezone": "EDT",
+          "exchangeTimezoneName": "America/New_York",
+          "regularMarketPrice": 100.67,
+          "fiftyTwoWeekHigh": 100.74,
+          "fiftyTwoWeekLow": 100.27,
+          "regularMarketDayHigh": 100.68,
+          "regularMarketDayLow": 100.67,
+          "regularMarketVolume": 33773551,
+          "longName": "iShares 0-3 Month Treasury Bond ETF",
+          "shortName": "iShares 0-3 Month Treasury Bond",
+          "chartPreviousClose": 100.58,
+          "priceHint": 2,
+          "currentTradingPeriod": {
+            "pre": {
+              "timezone": "EDT",
+              "start": 1780041600,
+              "end": 1780061400,
+              "gmtoffset": -14400
+            },
+            "regular": {
+              "timezone": "EDT",
+              "start": 1780061400,
+              "end": 1780084800,
+              "gmtoffset": -14400
+            },
+            "post": {
+              "timezone": "EDT",
+              "start": 1780084800,
+              "end": 1780099200,
+              "gmtoffset": -14400
+            }
+          },
+          "dataGranularity": "1d",
+          "range": "5d",
+          "validRanges": [
+            "1d",
+            "5d",
+            "1mo",
+            "3mo",
+            "6mo",
+            "1y",
+            "2y",
+            "5y",
+            "10y",
+            "ytd",
+            "max"
+          ]
+        },
+        "timestamp": [
+          1779456600,
+          1779802200,
+          1779888600,
+          1779975000,
+          1780061400
+        ],
+        "indicators": {
+          "quote": [
+            {
+              "high": [
+                100.62999725341797,
+                100.63999938964844,
+                100.6500015258789,
+                100.66000366210938,
+                100.68000030517578
+              ],
+              "close": [
+                100.62999725341797,
+                100.63999938964844,
+                100.6500015258789,
+                100.6500015258789,
+                100.66999816894531
+              ],
+              "low": [
+                100.62000274658203,
+                100.62999725341797,
+                100.63999938964844,
+                100.6500015258789,
+                100.66999816894531
+              ],
+              "volume": [
+                18433400,
+                21664500,
+                15484000,
+                16617000,
+                33971400
+              ],
+              "open": [
+                100.625,
+                100.63999938964844,
+                100.63999938964844,
+                100.65799713134766,
+                100.66999816894531
+              ]
+            }
+          ],
+          "adjclose": [
+            {
+              "adjclose": [
+                100.62999725341797,
+                100.63999938964844,
+                100.6500015258789,
+                100.6500015258789,
+                100.66999816894531
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "error": null
+  }
+}
