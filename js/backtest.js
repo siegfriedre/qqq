@@ -108,9 +108,12 @@ var Backtest = (function () {
         var maMap = { 5: ma5, 10: ma10, 20: ma20, 60: ma60, 120: ma120, 200: ma200 };
 
         var shares = 0;
-        var cashInvested = { dca: 0, rsi: 0, ma_buy: 0, ma_sell_proceeds: 0 };
+        var cashInvested = { dca: 0, rsi: 0, ma_buy: 0, ma_sell_proceeds: 0, rsi_sell_rebuy: 0, ma_sell_rebuy: 0 };
         var transactions = [];
         var lastDcaKey = null;
+
+        var maRebuyPool = 0;
+        var rsiRebuyPool = 0;
 
         for (var i = 0; i < filtered.dates.length; i++) {
             var ts = filtered.dates[i];
@@ -145,6 +148,25 @@ var Backtest = (function () {
                 transactions.push({ date: toDateStr(ts), type: 'rsi_buy', price: price, shares: addShares, amount: cfg.rsiAdd.amount, cashFlow: -cfg.rsiAdd.amount });
             }
 
+            if (cfg.rsiSell && cfg.rsiSell.enabled && rsi6[i] != null && rsiRebuyPool === 0 && rsi6[i] > cfg.rsiSell.threshold) {
+                var rsiSellShares = shares * (cfg.rsiSell.percent / 100);
+                if (rsiSellShares > 0.0001) {
+                    var rsiSellAmount = rsiSellShares * price;
+                    shares -= rsiSellShares;
+                    rsiRebuyPool = rsiSellAmount;
+                    cashInvested.rsi_sell_rebuy += rsiSellAmount;
+                    transactions.push({ date: toDateStr(ts), type: 'rsi_sell', price: price, shares: rsiSellShares, amount: rsiSellAmount, cashFlow: +rsiSellAmount });
+                }
+            }
+
+            if (cfg.rsiSell && cfg.rsiSell.rebuy && rsiRebuyPool > 0 && rsi6[i] != null && rsi6[i] < cfg.rsiSell.threshold) {
+                var rsiRebuyShares = rsiRebuyPool / price;
+                shares += rsiRebuyShares;
+                cashInvested.rsi_sell_rebuy -= rsiRebuyPool;
+                transactions.push({ date: toDateStr(ts), type: 'rsi_rebuy', price: price, shares: rsiRebuyShares, amount: rsiRebuyPool, cashFlow: -rsiRebuyPool });
+                rsiRebuyPool = 0;
+            }
+
             if (cfg.maAdd && cfg.maAdd.enabled && i > 0) {
                 var maA = maMap[cfg.maAdd.period];
                 if (maA && maA[i] != null && maA[i - 1] != null) {
@@ -160,23 +182,31 @@ var Backtest = (function () {
             if (cfg.maSell && cfg.maSell.enabled && i > 0) {
                 var maS = maMap[cfg.maSell.period];
                 if (maS && maS[i] != null && maS[i - 1] != null) {
-                    if (filtered.closes[i - 1] >= maS[i - 1] && filtered.closes[i] < maS[i]) {
+                    if (filtered.closes[i - 1] >= maS[i - 1] && filtered.closes[i] < maS[i] && maRebuyPool === 0) {
                         var sellShares = shares * (cfg.maSell.percent / 100);
                         if (sellShares > 0.0001) {
                             var sellAmount = sellShares * price;
                             shares -= sellShares;
-                            cashInvested.ma_sell_proceeds += sellAmount;
+                            maRebuyPool = sellAmount;
+                            cashInvested.ma_sell_rebuy += sellAmount;
                             transactions.push({ date: toDateStr(ts), type: 'ma_sell', price: price, shares: sellShares, amount: sellAmount, cashFlow: +sellAmount });
                         }
+                    }
+                    if (cfg.maSell.rebuy && maRebuyPool > 0 && filtered.closes[i - 1] <= maS[i - 1] && filtered.closes[i] > maS[i]) {
+                        var rebuyShares = maRebuyPool / price;
+                        shares += rebuyShares;
+                        cashInvested.ma_sell_rebuy -= maRebuyPool;
+                        transactions.push({ date: toDateStr(ts), type: 'ma_rebuy', price: price, shares: rebuyShares, amount: maRebuyPool, cashFlow: -maRebuyPool });
+                        maRebuyPool = 0;
                     }
                 }
             }
         }
 
         var lastPrice = filtered.closes[filtered.closes.length - 1];
-        var currentValue = shares * lastPrice;
+        var currentValue = shares * lastPrice + rsiRebuyPool + maRebuyPool;
         var totalInvested = cashInvested.dca + cashInvested.rsi + cashInvested.ma_buy;
-        var netInvested = totalInvested - cashInvested.ma_sell_proceeds;
+        var netInvested = totalInvested - (cashInvested.ma_sell_rebuy + cashInvested.rsi_sell_rebuy);
         var totalReturn = currentValue - netInvested;
         var totalReturnPct = netInvested > 0 ? (totalReturn / netInvested * 100) : 0;
 
@@ -187,11 +217,14 @@ var Backtest = (function () {
         var annualMap = {};
         for (var j = 0; j < transactions.length; j++) {
             var y = transactions[j].date.substring(0, 4);
-            if (!annualMap[y]) annualMap[y] = { dca: 0, rsi: 0, ma_buy: 0, ma_sell: 0, dcaIn: 0, rsiIn: 0, maIn: 0, maOut: 0 };
+            if (!annualMap[y]) annualMap[y] = { dca: 0, rsi: 0, ma_buy: 0, ma_sell: 0, rsi_sell: 0, rsi_rebuy: 0, ma_rebuy: 0, dcaIn: 0, rsiIn: 0, maIn: 0, maOut: 0, rsiOut: 0, maRIn: 0, rsiRIn: 0 };
             if (transactions[j].type === 'dca') { annualMap[y].dca++; annualMap[y].dcaIn += transactions[j].amount; }
             if (transactions[j].type === 'rsi_buy') { annualMap[y].rsi++; annualMap[y].rsiIn += transactions[j].amount; }
             if (transactions[j].type === 'ma_buy') { annualMap[y].ma_buy++; annualMap[y].maIn += transactions[j].amount; }
             if (transactions[j].type === 'ma_sell') { annualMap[y].ma_sell++; annualMap[y].maOut += transactions[j].amount; }
+            if (transactions[j].type === 'rsi_sell') { annualMap[y].rsi_sell++; annualMap[y].rsiOut += transactions[j].amount; }
+            if (transactions[j].type === 'rsi_rebuy') { annualMap[y].rsi_rebuy++; annualMap[y].rsiRIn += transactions[j].amount; }
+            if (transactions[j].type === 'ma_rebuy') { annualMap[y].ma_rebuy++; annualMap[y].maRIn += transactions[j].amount; }
         }
         var annuals = [];
         Object.keys(annualMap).sort().forEach(function (y) {
@@ -214,7 +247,7 @@ var Backtest = (function () {
             dcaReturn: dcaReturn,
             rsiReturn: rsiReturn,
             maBuyReturn: maBuyReturn,
-            maSellProceeds: cashInvested.ma_sell_proceeds,
+            maSellProceeds: cashInvested.ma_sell_rebuy + cashInvested.rsi_sell_rebuy,
             annuals: annuals
         };
     }
@@ -224,7 +257,7 @@ var Backtest = (function () {
         var combined = {
             totalInvested: 0, netInvested: 0, currentValue: 0, totalReturn: 0, totalReturnPct: 0,
             dcaReturn: 0, rsiReturn: 0, maBuyReturn: 0, maSellProceeds: 0,
-            cashInvested: { dca: 0, rsi: 0, ma_buy: 0, ma_sell_proceeds: 0 },
+            cashInvested: { dca: 0, rsi: 0, ma_buy: 0, ma_sell_rebuy: 0, rsi_sell_rebuy: 0 },
             stocks: []
         };
 
@@ -241,6 +274,7 @@ var Backtest = (function () {
                 endDate: endDate,
                 rsiAdd: sc.rsiAdd || null,
                 rsiPause: sc.rsiPause || null,
+                rsiSell: sc.rsiSell || null,
                 maAdd: sc.maAdd || null,
                 maSell: sc.maSell || null
             };
@@ -258,7 +292,8 @@ var Backtest = (function () {
             combined.cashInvested.dca += r.cashInvested.dca;
             combined.cashInvested.rsi += r.cashInvested.rsi;
             combined.cashInvested.ma_buy += r.cashInvested.ma_buy;
-            combined.cashInvested.ma_sell_proceeds += r.cashInvested.ma_sell_proceeds;
+            combined.cashInvested.ma_sell_rebuy += r.cashInvested.ma_sell_rebuy;
+            combined.cashInvested.rsi_sell_rebuy += r.cashInvested.rsi_sell_rebuy;
             combined.dcaReturn += r.dcaReturn;
             combined.rsiReturn += r.rsiReturn;
             combined.maBuyReturn += r.maBuyReturn;
@@ -270,11 +305,14 @@ var Backtest = (function () {
         var mergedAnnuals = {};
         results.forEach(function (r) {
             r.annuals.forEach(function (a) {
-                if (!mergedAnnuals[a.year]) mergedAnnuals[a.year] = { year: a.year, dca: 0, rsi: 0, ma_buy: 0, ma_sell: 0, dcaIn: 0, rsiIn: 0, maIn: 0, maOut: 0 };
+                if (!mergedAnnuals[a.year]) mergedAnnuals[a.year] = { year: a.year, dca: 0, rsi: 0, ma_buy: 0, ma_sell: 0, rsi_sell: 0, rsi_rebuy: 0, ma_rebuy: 0, dcaIn: 0, rsiIn: 0, maIn: 0, maOut: 0, rsiOut: 0, maRIn: 0, rsiRIn: 0 };
                 mergedAnnuals[a.year].dca += a.dca;
                 mergedAnnuals[a.year].rsi += a.rsi;
                 mergedAnnuals[a.year].ma_buy += a.ma_buy;
                 mergedAnnuals[a.year].ma_sell += a.ma_sell;
+                mergedAnnuals[a.year].rsi_sell += a.rsi_sell;
+                mergedAnnuals[a.year].rsi_rebuy += a.rsi_rebuy;
+                mergedAnnuals[a.year].ma_rebuy += a.ma_rebuy;
                 mergedAnnuals[a.year].dcaIn += a.dcaIn;
                 mergedAnnuals[a.year].rsiIn += a.rsiIn;
                 mergedAnnuals[a.year].maIn += a.maIn;
