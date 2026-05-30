@@ -310,6 +310,9 @@
         var rsi6Arr = calcRSI(closes, 6);
         var rsi12Arr = calcRSI(closes, 12);
         var rsi24Arr = calcRSI(closes, 24);
+        rsi6Arr.unshift(null);
+        rsi12Arr.unshift(null);
+        rsi24Arr.unshift(null);
 
         var option = {
             backgroundColor: 'transparent',
