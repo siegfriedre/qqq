@@ -382,6 +382,57 @@
 .bt-annual td.up { color: var(--green); }
 .bt-annual td.down { color: var(--red); }
 
+.annual-row-a { background: rgba(0, 240, 255, 0.12); }
+.annual-row-b { background: rgba(179, 71, 234, 0.12); }
+
+.bt-expand-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--text-dim);
+    width: 22px;
+    height: 22px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 15px;
+    line-height: 1;
+    padding: 0;
+}
+.bt-expand-btn:hover { color: var(--cyan); border-color: var(--cyan); }
+
+.bt-tx-detail-row { display: none; }
+.bt-tx-detail-row.open { display: table-row; }
+.bt-tx-detail-row td { padding: 0 !important; border: none !important; }
+
+.bt-tx-detail-inner {
+    padding: 8px 14px 12px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.bt-tx-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px;
+}
+.bt-tx-table th {
+    text-align: left;
+    color: var(--text-dim);
+    padding: 5px 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    white-space: nowrap;
+    font-size: 13px;
+}
+.bt-tx-table td {
+    padding: 4px 8px;
+    color: #c8d6e5;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    white-space: nowrap;
+    font-size: 14px;
+}
+.bt-tx-table tr.up td { color: var(--green); }
+.bt-tx-table tr.down td { color: var(--red); }
+
 /* ---- responsive ---- */
 @media (max-width: 768px) {
     .bt-title { font-size: 14px; }
