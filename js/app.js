@@ -11,15 +11,14 @@
 
     let stockData = {};
     let activeSymbol = 'QQQ';
-    let activeRange = '6mo';
     let activeInterval = '1d';
+    let dataRange = '5y';
     let mainChart;
 
     const dom = {
         cards: document.getElementById('stockCards'),
         mainChart: document.getElementById('mainChart'),
         chartTitle: document.getElementById('chartTitle'),
-        rangeSelector: document.getElementById('rangeSelector'),
         intervalSelector: document.getElementById('intervalSelector'),
         clock: document.getElementById('clock'),
         stats: {
@@ -280,8 +279,8 @@
         var option = {
             backgroundColor: 'transparent',
             grid: [
-                { left: '8%', right: '3%', top: '8%', height: '62%' },
-                { left: '8%', right: '3%', top: '78%', height: '16%' }
+                { left: '8%', right: '3%', top: '8%', height: '58%' },
+                { left: '8%', right: '3%', top: '72%', height: '14%' }
             ],
             xAxis: [
                 {
@@ -415,6 +414,37 @@
                     yAxisIndex: 1,
                     data: volData,
                     emphasis: { focus: 'series' }
+                }
+            ],
+            dataZoom: [
+                {
+                    type: 'inside',
+                    xAxisIndex: [0, 1],
+                    start: 70,
+                    end: 100,
+                    zoomOnMouseWheel: true,
+                    moveOnMouseMove: true,
+                    moveOnMouseWheel: false
+                },
+                {
+                    type: 'slider',
+                    xAxisIndex: [0, 1],
+                    start: 70,
+                    end: 100,
+                    height: 22,
+                    bottom: 8,
+                    borderColor: 'rgba(255,255,255,0.06)',
+                    fillerColor: 'rgba(0,240,255,0.06)',
+                    handleStyle: { color: '#00f0ff', borderColor: '#00f0ff' },
+                    textStyle: { color: '#6b7d95', fontFamily: 'Share Tech Mono', fontSize: 10 },
+                    dataBackground: {
+                        lineStyle: { color: 'rgba(0,240,255,0.15)' },
+                        areaStyle: { color: 'rgba(0,240,255,0.04)' }
+                    },
+                    selectedDataBackground: {
+                        lineStyle: { color: 'rgba(0,240,255,0.4)' },
+                        areaStyle: { color: 'rgba(0,240,255,0.1)' }
+                    }
                 }
             ],
             tooltip: {
@@ -552,10 +582,9 @@
         }
     }
 
-    async function loadAndRender(symbol, range, interval, setActive) {
+    async function loadAndRender(symbol, interval, setActive) {
         if (setActive) {
             activeSymbol = symbol;
-            activeRange = range;
             activeInterval = interval || '1d';
         }
 
@@ -567,22 +596,17 @@
             c.classList.toggle('active', c.dataset.symbol === symbol);
         });
 
-        var rangeBtns = dom.rangeSelector.querySelectorAll('.range-btn');
-        rangeBtns.forEach(function (b) {
-            b.classList.toggle('active', b.dataset.range === activeRange);
-        });
-
         var intervalBtns = dom.intervalSelector.querySelectorAll('.range-btn');
         intervalBtns.forEach(function (b) {
             b.classList.toggle('active', b.dataset.interval === activeInterval);
         });
 
-        var result = stockData[symbol + '_' + range];
+        var result = stockData[symbol + '_' + dataRange];
         if (!result) {
-            var fresh = await fetchStockData([symbol], range);
+            var fresh = await fetchStockData([symbol], dataRange);
             result = fresh[symbol];
             if (result) {
-                stockData[symbol + '_' + range] = result;
+                stockData[symbol + '_' + dataRange] = result;
             }
         }
 
@@ -627,7 +651,7 @@
             var card = e.target.closest('.card');
             if (!card) return;
             var symbol = card.dataset.symbol;
-            if (symbol) loadAndRender(symbol, activeRange, activeInterval, true);
+            if (symbol) loadAndRender(symbol, activeInterval, true);
         });
 
         dom.cards.querySelectorAll('.card').forEach(function (card) {
@@ -641,19 +665,12 @@
         });
     }
 
-    function initRangeEvents() {
-        dom.rangeSelector.addEventListener('click', function (e) {
-            var btn = e.target.closest('.range-btn');
-            if (!btn) return;
-            var range = btn.dataset.range;
-            if (range) loadAndRender(activeSymbol, range, activeInterval, true);
-        });
-
+    function initIntervalEvents() {
         dom.intervalSelector.addEventListener('click', function (e) {
             var btn = e.target.closest('.range-btn');
             if (!btn) return;
             var interval = btn.dataset.interval;
-            if (interval) loadAndRender(activeSymbol, activeRange, interval, true);
+            if (interval) loadAndRender(activeSymbol, interval, true);
         });
     }
 
@@ -753,7 +770,7 @@
         initBackground();
         initCharts();
         initCardEvents();
-        initRangeEvents();
+        initIntervalEvents();
         updateClock();
         setInterval(updateClock, 1000);
 
@@ -761,7 +778,7 @@
         if (defaultCard) defaultCard.classList.add('active');
 
         await initAllCards();
-        await loadAndRender('QQQ', '6mo', '1d', true);
+        await loadAndRender('QQQ', '1d', true);
     }
 
     document.addEventListener('DOMContentLoaded', init);

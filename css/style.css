@@ -281,13 +281,6 @@ body {
     margin-bottom: 10px;
 }
 
-.header-selectors {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    align-items: flex-end;
-}
-
 .panel-title {
     font-family: 'Share Tech Mono', monospace;
     font-size: 13px;
@@ -295,8 +288,7 @@ body {
     letter-spacing: 3px;
 }
 
-.interval-selector,
-.range-selector {
+.interval-selector {
     display: flex;
     gap: 4px;
     background: rgba(255, 255, 255, 0.03);
@@ -506,12 +498,7 @@ body {
         gap: 8px;
         margin-bottom: 8px;
     }
-    .header-selectors {
-        align-items: flex-start;
-        width: 100%;
-    }
-    .interval-selector,
-    .range-selector {
+    .interval-selector {
         flex-wrap: wrap;
     }
     .panel-title {
