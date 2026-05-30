@@ -310,15 +310,6 @@
         var rsi6Arr = calcRSI(closes, 6);
         var rsi12Arr = calcRSI(closes, 12);
         var rsi24Arr = calcRSI(closes, 24);
-        var rsiMap = {};
-        for (var i = 0; i < dates.length; i++) {
-            if (rsi6Arr[i] == null && rsi12Arr[i] == null && rsi24Arr[i] == null) continue;
-            rsiMap[dates[i]] = {
-                r6: rsi6Arr[i],
-                r12: rsi12Arr[i],
-                r24: rsi24Arr[i]
-            };
-        }
 
         var option = {
             backgroundColor: 'transparent',
@@ -570,9 +561,12 @@
                     fontSize: 11
                 },
                 formatter: function (params) {
-                    var ts;
+                    var ts, idx = -1;
                     params.forEach(function (p) {
-                        if (!ts && p.seriesName === 'K线' && p.value) ts = p.value[0];
+                        if (p.seriesName === 'K线') {
+                            ts = p.value ? p.value[0] : null;
+                            idx = p.dataIndex;
+                        }
                     });
                     if (!ts) ts = params[0].axisValue;
                     var d = ts ? new Date(ts) : new Date();
@@ -580,12 +574,12 @@
                         String(d.getMonth() + 1).padStart(2, '0') + '/' +
                         String(d.getDate()).padStart(2, '0');
                     var html = '<div style="padding:4px 0;color:#00f0ff;font-weight:bold;">' + dateStr + '</div>';
-                    var rsi = rsiMap[ts];
-                    if (rsi) {
+                    if (idx >= 0) {
+                        var r6 = rsi6Arr[idx], r12 = rsi12Arr[idx], r24 = rsi24Arr[idx];
                         html += '<div style="padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);margin-bottom:4px;">' +
-                            '<span style="color:#f5a623;">RSI6</span> <span style="color:#c8d6e5;">' + (rsi.r6 != null ? rsi.r6.toFixed(1) : '--') + '</span>  ' +
-                            '<span style="color:#00d2ff;">RSI12</span> <span style="color:#c8d6e5;">' + (rsi.r12 != null ? rsi.r12.toFixed(1) : '--') + '</span>  ' +
-                            '<span style="color:#b347ea;">RSI24</span> <span style="color:#c8d6e5;">' + (rsi.r24 != null ? rsi.r24.toFixed(1) : '--') + '</span>' +
+                            '<span style="color:#f5a623;">RSI6</span> <span style="color:#c8d6e5;">' + (r6 != null ? r6.toFixed(1) : '--') + '</span>  ' +
+                            '<span style="color:#00d2ff;">RSI12</span> <span style="color:#c8d6e5;">' + (r12 != null ? r12.toFixed(1) : '--') + '</span>  ' +
+                            '<span style="color:#b347ea;">RSI24</span> <span style="color:#c8d6e5;">' + (r24 != null ? r24.toFixed(1) : '--') + '</span>' +
                             '</div>';
                     }
                     params.forEach(function (p) {
