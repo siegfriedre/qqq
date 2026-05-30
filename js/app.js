@@ -570,7 +570,11 @@
                     fontSize: 11
                 },
                 formatter: function (params) {
-                    var ts = params[0].axisValue;
+                    var ts;
+                    params.forEach(function (p) {
+                        if (!ts && p.seriesName === 'K线' && p.value) ts = p.value[0];
+                    });
+                    if (!ts) ts = params[0].axisValue;
                     var d = ts ? new Date(ts) : new Date();
                     var dateStr = d.getFullYear() + '/' +
                         String(d.getMonth() + 1).padStart(2, '0') + '/' +
