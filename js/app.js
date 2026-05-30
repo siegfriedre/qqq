@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    const SYMBOLS = ['QQQ', 'TQQQ', 'SMH', 'VGT'];
+    const SYMBOLS = ['QQQ', 'TQQQ', 'SMH', 'VGT', 'SGOV'];
     const BT_SYMBOLS = ['QQQ', 'TQQQ', 'SMH', 'VGT', 'SGOV'];
     const CACHE_KEY = 'stock_data_cache';
     const CACHE_EXPIRY = 4 * 60 * 60 * 1000;
