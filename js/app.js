@@ -375,53 +375,6 @@
                     }
                 }
             ],
-            xAxis: [
-                {
-                    type: 'time',
-                    gridIndex: 0,
-                    axisLine: { lineStyle: { color: 'rgba(255,255,255,0.08)' } },
-                    axisTick: { show: false },
-                    axisLabel: {
-                        color: '#6b7d95',
-                        fontSize: 10,
-                        fontFamily: 'Share Tech Mono'
-                    },
-                    splitLine: { show: false }
-                },
-                {
-                    type: 'time',
-                    gridIndex: 1,
-                    axisLine: { lineStyle: { color: 'rgba(255,255,255,0.08)' } },
-                    axisTick: { show: false },
-                    axisLabel: { show: false },
-                    splitLine: { show: false }
-                }
-            ],
-            yAxis: [
-                {
-                    type: 'value',
-                    gridIndex: 0,
-                    scale: true,
-                    splitNumber: 6,
-                    axisLine: { show: false },
-                    axisTick: { show: false },
-                    axisLabel: {
-                        color: '#6b7d95',
-                        fontSize: 10,
-                        fontFamily: 'Share Tech Mono',
-                        formatter: function (val) { return val.toFixed(2); }
-                    },
-                    splitLine: { lineStyle: { color: 'rgba(255,255,255,0.04)' } }
-                },
-                {
-                    type: 'value',
-                    gridIndex: 1,
-                    axisLine: { show: false },
-                    axisTick: { show: false },
-                    axisLabel: { show: false },
-                    splitLine: { show: false }
-                }
-            ],
             series: [
                 {
                     name: 'K线',
