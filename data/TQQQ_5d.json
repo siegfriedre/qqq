@@ -1,0 +1,126 @@
+{
+  "chart": {
+    "result": [
+      {
+        "meta": {
+          "currency": "USD",
+          "symbol": "TQQQ",
+          "exchangeName": "NGM",
+          "fullExchangeName": "NasdaqGM",
+          "instrumentType": "ETF",
+          "firstTradeDate": 1265898600,
+          "regularMarketTime": 1780084800,
+          "hasPrePostMarketData": true,
+          "gmtoffset": -14400,
+          "timezone": "EDT",
+          "exchangeTimezoneName": "America/New_York",
+          "regularMarketPrice": 84.56,
+          "fiftyTwoWeekHigh": 85.7,
+          "fiftyTwoWeekLow": 34.345,
+          "regularMarketDayHigh": 85.7,
+          "regularMarketDayLow": 83.53,
+          "regularMarketVolume": 67268012,
+          "longName": "ProShares UltraPro QQQ",
+          "shortName": "ProShares UltraPro QQQ",
+          "chartPreviousClose": 76.95,
+          "priceHint": 2,
+          "currentTradingPeriod": {
+            "pre": {
+              "timezone": "EDT",
+              "start": 1780041600,
+              "end": 1780061400,
+              "gmtoffset": -14400
+            },
+            "regular": {
+              "timezone": "EDT",
+              "start": 1780061400,
+              "end": 1780084800,
+              "gmtoffset": -14400
+            },
+            "post": {
+              "timezone": "EDT",
+              "start": 1780084800,
+              "end": 1780099200,
+              "gmtoffset": -14400
+            }
+          },
+          "dataGranularity": "1d",
+          "range": "5d",
+          "validRanges": [
+            "1d",
+            "5d",
+            "1mo",
+            "3mo",
+            "6mo",
+            "1y",
+            "2y",
+            "5y",
+            "10y",
+            "ytd",
+            "max"
+          ]
+        },
+        "timestamp": [
+          1779456600,
+          1779802200,
+          1779888600,
+          1779975000,
+          1780061400
+        ],
+        "indicators": {
+          "quote": [
+            {
+              "volume": [
+                58330500,
+                62579600,
+                66221000,
+                55265900,
+                67413900
+              ],
+              "high": [
+                79.33000183105469,
+                82.2699966430664,
+                82.91000366210938,
+                84.05000305175781,
+                85.69999694824219
+              ],
+              "open": [
+                78.04000091552734,
+                80.58999633789062,
+                82.87000274658203,
+                81.73999786376953,
+                84.41000366210938
+              ],
+              "close": [
+                77.83999633789062,
+                81.94999694824219,
+                81.66999816894531,
+                83.68000030517578,
+                84.55999755859375
+              ],
+              "low": [
+                77.33000183105469,
+                79.9800033569336,
+                80.33000183105469,
+                80.66000366210938,
+                83.52999877929688
+              ]
+            }
+          ],
+          "adjclose": [
+            {
+              "adjclose": [
+                77.83999633789062,
+                81.94999694824219,
+                81.66999816894531,
+                83.68000030517578,
+                84.55999755859375
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "error": null
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "chart": {
+    "result": [
+      {
+        "meta": {
+          "currency": "USD",
+          "symbol": "VGT",
+          "exchangeName": "PCX",
+          "fullExchangeName": "NYSEArca",
+          "instrumentType": "ETF",
+          "firstTradeDate": 1075473000,
+          "regularMarketTime": 1780084800,
+          "hasPrePostMarketData": true,
+          "gmtoffset": -14400,
+          "timezone": "EDT",
+          "exchangeTimezoneName": "America/New_York",
+          "regularMarketPrice": 121.06,
+          "fiftyTwoWeekHigh": 121.5,
+          "fiftyTwoWeekLow": 75.509,
+          "regularMarketDayHigh": 121.5,
+          "regularMarketDayLow": 120.03,
+          "regularMarketVolume": 4820519,
+          "longName": "Vanguard Information Technology Index Fund ETF Shares",
+          "shortName": "Vanguard Information Tech ETF",
+          "chartPreviousClose": 114.49,
+          "priceHint": 2,
+          "currentTradingPeriod": {
+            "pre": {
+              "timezone": "EDT",
+              "end": 1780061400,
+              "start": 1780041600,
+              "gmtoffset": -14400
+            },
+            "regular": {
+              "timezone": "EDT",
+              "end": 1780084800,
+              "start": 1780061400,
+              "gmtoffset": -14400
+            },
+            "post": {
+              "timezone": "EDT",
+              "end": 1780099200,
+              "start": 1780084800,
+              "gmtoffset": -14400
+            }
+          },
+          "dataGranularity": "1d",
+          "range": "5d",
+          "validRanges": [
+            "1d",
+            "5d",
+            "1mo",
+            "3mo",
+            "6mo",
+            "1y",
+            "2y",
+            "5y",
+            "10y",
+            "ytd",
+            "max"
+          ]
+        },
+        "timestamp": [
+          1779456600,
+          1779802200,
+          1779888600,
+          1779975000,
+          1780061400
+        ],
+        "indicators": {
+          "quote": [
+            {
+              "low": [
+                115.13999938964844,
+                116.87999725341797,
+                116.3499984741211,
+                117.18000030517578,
+                120.02999877929688
+              ],
+              "close": [
+                115.75,
+                118.05000305175781,
+                117.37999725341797,
+                118.94999694824219,
+                121.05999755859375
+              ],
+              "high": [
+                116.5,
+                118.62000274658203,
+                118.69999694824219,
+                119.30000305175781,
+                121.5
+              ],
+              "volume": [
+                3716000,
+                5046900,
+                4801700,
+                4002800,
+                4907200
+              ],
+              "open": [
+                115.51000213623047,
+                117.30000305175781,
+                118.48999786376953,
+                117.69000244140625,
+                120.16999816894531
+              ]
+            }
+          ],
+          "adjclose": [
+            {
+              "adjclose": [
+                115.75,
+                118.05000305175781,
+                117.37999725341797,
+                118.94999694824219,
+                121.05999755859375
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "error": null
+  }
+}

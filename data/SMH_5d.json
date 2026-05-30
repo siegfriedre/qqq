@@ -1,0 +1,126 @@
+{
+  "chart": {
+    "result": [
+      {
+        "meta": {
+          "currency": "USD",
+          "symbol": "SMH",
+          "exchangeName": "NGM",
+          "fullExchangeName": "NasdaqGM",
+          "instrumentType": "ETF",
+          "firstTradeDate": 960211800,
+          "regularMarketTime": 1780084800,
+          "hasPrePostMarketData": true,
+          "gmtoffset": -14400,
+          "timezone": "EDT",
+          "exchangeTimezoneName": "America/New_York",
+          "regularMarketPrice": 598.93,
+          "fiftyTwoWeekHigh": 612.3,
+          "fiftyTwoWeekLow": 238.96,
+          "regularMarketDayHigh": 611.789,
+          "regularMarketDayLow": 597.17,
+          "regularMarketVolume": 7093184,
+          "longName": "VanEck Semiconductor ETF",
+          "shortName": "VanEck Semiconductor ETF",
+          "chartPreviousClose": 567.88,
+          "priceHint": 2,
+          "currentTradingPeriod": {
+            "pre": {
+              "timezone": "EDT",
+              "start": 1780041600,
+              "end": 1780061400,
+              "gmtoffset": -14400
+            },
+            "regular": {
+              "timezone": "EDT",
+              "start": 1780061400,
+              "end": 1780084800,
+              "gmtoffset": -14400
+            },
+            "post": {
+              "timezone": "EDT",
+              "start": 1780084800,
+              "end": 1780099200,
+              "gmtoffset": -14400
+            }
+          },
+          "dataGranularity": "1d",
+          "range": "5d",
+          "validRanges": [
+            "1d",
+            "5d",
+            "1mo",
+            "3mo",
+            "6mo",
+            "1y",
+            "2y",
+            "5y",
+            "10y",
+            "ytd",
+            "max"
+          ]
+        },
+        "timestamp": [
+          1779456600,
+          1779802200,
+          1779888600,
+          1779975000,
+          1780061400
+        ],
+        "indicators": {
+          "quote": [
+            {
+              "high": [
+                582.5,
+                603.969970703125,
+                612.2999877929688,
+                604.739990234375,
+                611.7899780273438
+              ],
+              "volume": [
+                7535000,
+                10008500,
+                11209000,
+                7625000,
+                7596100
+              ],
+              "low": [
+                572.8599853515625,
+                589.0999755859375,
+                584.9299926757812,
+                587.3099975585938,
+                597.1199951171875
+              ],
+              "close": [
+                576.3200073242188,
+                602.1400146484375,
+                595.5,
+                599.8300170898438,
+                598.9299926757812
+              ],
+              "open": [
+                574.27001953125,
+                591.5800170898438,
+                611.9400024414062,
+                595.8099975585938,
+                606.030029296875
+              ]
+            }
+          ],
+          "adjclose": [
+            {
+              "adjclose": [
+                576.3200073242188,
+                602.1400146484375,
+                595.5,
+                599.8300170898438,
+                598.9299926757812
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "error": null
+  }
+}
