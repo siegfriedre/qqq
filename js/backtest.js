@@ -154,10 +154,8 @@ var Backtest = (function () {
                     var rsiSellAmount = rsiSellShares * price;
                     shares -= rsiSellShares;
                     cashInvested.rsi_sell_rebuy += rsiSellAmount;
+                    rsiRebuyPool += rsiSellAmount;
                     transactions.push({ date: toDateStr(ts), type: 'rsi_sell', price: price, shares: rsiSellShares, amount: rsiSellAmount, cashFlow: +rsiSellAmount });
-                    if (cfg.rsiSell.rebuy) {
-                        rsiRebuyPool += rsiSellAmount;
-                    }
                 }
             }
 
@@ -190,10 +188,8 @@ var Backtest = (function () {
                             var sellAmount = sellShares * price;
                             shares -= sellShares;
                             cashInvested.ma_sell_rebuy += sellAmount;
+                            maRebuyPool += sellAmount;
                             transactions.push({ date: toDateStr(ts), type: 'ma_sell', price: price, shares: sellShares, amount: sellAmount, cashFlow: +sellAmount });
-                            if (cfg.maSell.rebuy) {
-                                maRebuyPool += sellAmount;
-                            }
                         }
                     }
                     if (cfg.maSell.rebuy && maRebuyPool > 0 && filtered.closes[i - 1] <= maS[i - 1] && filtered.closes[i] > maS[i]) {
