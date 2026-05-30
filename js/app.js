@@ -891,11 +891,250 @@
         dom.clock.textContent = h + ':' + m + ':' + s;
     }
 
+    function initBacktest() {
+        var btHeader = document.getElementById('btHeader');
+        var btBody = document.getElementById('btBody');
+        var btToggle = document.getElementById('btToggle');
+
+        btHeader.addEventListener('click', function () {
+            var open = btBody.classList.toggle('open');
+            btToggle.textContent = open ? '▲' : '▼';
+        });
+
+        var strategyLabels = { a: '策略A', b: '策略B' };
+        var strategyColors = { a: 'bt-a', b: 'bt-b' };
+        var strategyNames = { a: 'STRATEGY A', b: 'STRATEGY B' };
+
+        function buildStockRow(strategy, stockIdx) {
+            var s = strategy.stocks[stockIdx] || {};
+            var opts = SYMBOLS.map(function (sym) {
+                return '<option value="' + sym + '"' + (s.symbol === sym ? ' selected' : '') + '>' + sym + '</option>';
+            }).join('');
+
+            var methodDca = (!s.method || s.method === 'dca') ? 'selected' : '';
+            var methodSignal = (s.method === 'signal') ? 'selected' : '';
+
+            var periodM = (s.dcaPeriod === 'monthly' || !s.dcaPeriod) ? 'selected' : '';
+            var periodW = (s.dcaPeriod === 'weekly') ? 'selected' : '';
+            var periodY = (s.dcaPeriod === 'yearly') ? 'selected' : '';
+
+            var rsiChecked = s.rsiAdd && s.rsiAdd.enabled ? 'checked' : '';
+            var rsiPauseChecked = s.rsiPause && s.rsiPause.enabled ? 'checked' : '';
+            var maAddChecked = s.maAdd && s.maAdd.enabled ? 'checked' : '';
+            var maSellChecked = s.maSell && s.maSell.enabled ? 'checked' : '';
+
+            return '<div class="bt-stock-row">' +
+                '<div class="bt-stock-header">' +
+                '<select class="bt-stock-symbol">' + opts + '</select>' +
+                '<select class="bt-stock-method"><option value="dca"' + methodDca + '>定投</option><option value="signal"' + methodSignal + '>信号策略</option></select>' +
+                '<button class="bt-remove">×</button>' +
+                '</div>' +
+                '<div class="bt-stock-fields">' +
+                '<div class="bt-field"><label>定投周期</label><select class="bt-dca-period"><option value="monthly"' + periodM + '>月</option><option value="weekly"' + periodW + '>周</option><option value="yearly"' + periodY + '>年</option></select></div>' +
+                '<div class="bt-field"><label>金额</label><input type="number" class="bt-dca-amount" value="' + (s.dcaAmount || 1000) + '" min="0"></div>' +
+                '</div>' +
+                '<div class="bt-stock-rules">' +
+                '<label class="bt-rule"><input type="checkbox" class="bt-rsi-add-ck" ' + rsiChecked + '> RSI6 &lt; <input type="number" class="bt-rsi-add-val" value="' + ((s.rsiAdd && s.rsiAdd.threshold) || 30) + '" min="1" max="99"> 加仓 <input type="number" class="bt-rsi-add-amt" value="' + ((s.rsiAdd && s.rsiAdd.amount) || 2000) + '" min="0"></label>' +
+                '<label class="bt-rule"><input type="checkbox" class="bt-rsi-pause-ck" ' + rsiPauseChecked + '> RSI6 &gt; <input type="number" class="bt-rsi-pause-val" value="' + ((s.rsiPause && s.rsiPause.threshold) || 70) + '" min="1" max="99"> 暂停定投</label>' +
+                '<label class="bt-rule"><input type="checkbox" class="bt-ma-add-ck" ' + maAddChecked + '> <select class="bt-ma-add-ma"><option value="5">MA5</option><option value="10">MA10</option><option value="20">MA20</option><option value="60">MA60</option></select> 上穿 <select class="bt-ma-add-base"><option value="10">MA10</option><option value="20" selected>MA20</option><option value="60">MA60</option></select> 加仓 <input type="number" class="bt-ma-add-amt" value="' + ((s.maAdd && s.maAdd.amount) || 2000) + '" min="0"></label>' +
+                '<label class="bt-rule"><input type="checkbox" class="bt-ma-sell-ck" ' + maSellChecked + '> <select class="bt-ma-sell-ma"><option value="5">MA5</option><option value="10">MA10</option><option value="20">MA20</option></select> 下穿 <select class="bt-ma-sell-base"><option value="10">MA10</option><option value="20" selected>MA20</option><option value="60">MA60</option></select> 卖出 <input type="number" class="bt-ma-sell-pct" value="' + ((s.maSell && s.maSell.percent) || 50) + '" min="1" max="100"> %</label>' +
+                '</div>' +
+                '</div>';
+        }
+
+        function buildStrategyUI(key) {
+            var strategy = getStrategy(key);
+            var html = '<div class="bt-strategy ' + strategyColors[key] + '">' +
+                '<div class="bt-strategy-title">[ ' + strategyNames[key] + ' ]</div>' +
+                '<div class="bt-stocks" id="btStocks' + key.toUpperCase() + '">';
+            strategy.stocks.forEach(function (s, i) {
+                html += buildStockRow(strategy, i);
+            });
+            html += '</div>' +
+                '<button class="bt-add-stock" data-strategy="' + key + '">+ 添加股票</button>' +
+                '</div>';
+            return html;
+        }
+
+        var strategies = {
+            a: { stocks: [{ symbol: 'QQQ', method: 'dca', dcaPeriod: 'monthly', dcaAmount: 1000, rsiAdd: { enabled: true, threshold: 30, amount: 2000 }, rsiPause: { enabled: true, threshold: 70 }, maAdd: null, maSell: null }] },
+            b: { stocks: [{ symbol: 'QQQ', method: 'dca', dcaPeriod: 'monthly', dcaAmount: 2000, rsiAdd: null, rsiPause: null, maAdd: null, maSell: null }] }
+        };
+
+        function getStrategy(key) { return strategies[key]; }
+
+        function readStockRow(row) {
+            var sym = row.querySelector('.bt-stock-symbol').value;
+            var method = row.querySelector('.bt-stock-method').value;
+            var period = row.querySelector('.bt-dca-period').value;
+            var amount = parseFloat(row.querySelector('.bt-dca-amount').value) || 0;
+
+            var rsiAddCk = row.querySelector('.bt-rsi-add-ck');
+            var rsiAdd = rsiAddCk && rsiAddCk.checked ? {
+                enabled: true,
+                threshold: parseFloat(row.querySelector('.bt-rsi-add-val').value) || 30,
+                amount: parseFloat(row.querySelector('.bt-rsi-add-amt').value) || 2000
+            } : null;
+
+            var rsiPauseCk = row.querySelector('.bt-rsi-pause-ck');
+            var rsiPause = rsiPauseCk && rsiPauseCk.checked ? {
+                enabled: true,
+                threshold: parseFloat(row.querySelector('.bt-rsi-pause-val').value) || 70
+            } : null;
+
+            var maAddCk = row.querySelector('.bt-ma-add-ck');
+            var maAdd = maAddCk && maAddCk.checked ? {
+                enabled: true,
+                short: parseInt(row.querySelector('.bt-ma-add-ma').value),
+                long: parseInt(row.querySelector('.bt-ma-add-base').value),
+                amount: parseFloat(row.querySelector('.bt-ma-add-amt').value) || 2000
+            } : null;
+
+            var maSellCk = row.querySelector('.bt-ma-sell-ck');
+            var maSell = maSellCk && maSellCk.checked ? {
+                enabled: true,
+                short: parseInt(row.querySelector('.bt-ma-sell-ma').value),
+                long: parseInt(row.querySelector('.bt-ma-sell-base').value),
+                percent: parseFloat(row.querySelector('.bt-ma-sell-pct').value) || 50
+            } : null;
+
+            return { symbol: sym, method: method, dcaPeriod: period, dcaAmount: amount, rsiAdd: rsiAdd, rsiPause: rsiPause, maAdd: maAdd, maSell: maSell };
+        }
+
+        function collectStrategy(key) {
+            var container = document.getElementById('btStocks' + key.toUpperCase());
+            if (!container) return [];
+            var rows = container.querySelectorAll('.bt-stock-row');
+            var stocks = [];
+            rows.forEach(function (r) { stocks.push(readStockRow(r)); });
+            return stocks;
+        }
+
+        function refreshUI() {
+            var html = buildStrategyUI('a') + buildStrategyUI('b');
+            document.getElementById('btStrategies').innerHTML = html;
+
+            document.querySelectorAll('.bt-add-stock').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var key = this.dataset.strategy;
+                    var s = getStrategy(key);
+                    s.stocks.push({ symbol: 'QQQ', method: 'dca', dcaPeriod: 'monthly', dcaAmount: 1000 });
+                    refreshUI();
+                });
+            });
+
+            document.querySelectorAll('.bt-remove').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var row = this.closest('.bt-stock-row');
+                    var strategyDiv = this.closest('.bt-strategy');
+                    var key = strategyDiv.classList.contains('bt-a') ? 'a' : 'b';
+                    var container = document.getElementById('btStocks' + key.toUpperCase());
+                    var rows = container.querySelectorAll('.bt-stock-row');
+                    var idx = Array.prototype.indexOf.call(rows, row);
+                    if (idx >= 0) getStrategy(key).stocks.splice(idx, 1);
+                    refreshUI();
+                });
+            });
+
+            document.querySelectorAll('.bt-stock-symbol').forEach(function (sel) {
+                sel.addEventListener('change', function () {});
+            });
+        }
+
+        function showResults(resultA, resultB) {
+            var resultsDiv = document.getElementById('btResults');
+            var summaryDiv = document.getElementById('btSummary');
+            var annualDiv = document.getElementById('btAnnual');
+            resultsDiv.classList.add('show');
+
+            function fmtPct(v) { return (v >= 0 ? '+' : '') + v.toFixed(2) + '%'; }
+            function fmtMoney(v) { return '¥' + Number(v).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+            function fmtCls(v) { return v >= 0 ? 'up' : 'down'; }
+
+            function buildCard(r, key) {
+                var c = r.combined;
+                return '<div class="bt-summary-card ' + key + '">' +
+                    '<div class="bt-summary-title">[ ' + r.name + ' ] ' + r.stocks.map(function (s) { return s.symbol; }).join(' + ') + '</div>' +
+                    '<div class="bt-summary-row"><span class="label">定投总投入</span><span class="value">' + fmtMoney(c.cashInvested.dca) + '</span></div>' +
+                    '<div class="bt-summary-row"><span class="label">RSI加仓投入</span><span class="value">' + fmtMoney(c.cashInvested.rsi) + '</span></div>' +
+                    '<div class="bt-summary-row"><span class="label">MA加仓投入</span><span class="value">' + fmtMoney(c.cashInvested.ma_buy) + '</span></div>' +
+                    '<div class="bt-summary-row"><span class="label">MA卖出回笼</span><span class="value">' + fmtMoney(c.cashInvested.ma_sell_proceeds) + '</span></div>' +
+                    '<div class="bt-summary-row total"><span class="label">当前市值</span><span class="value">' + fmtMoney(c.currentValue) + '</span></div>' +
+                    '<div class="bt-summary-row"><span class="label">净投入</span><span class="value">' + fmtMoney(c.netInvested) + '</span></div>' +
+                    '<div class="bt-summary-row"><span class="label">总收益</span><span class="value ' + fmtCls(c.totalReturn) + '">' + fmtMoney(c.totalReturn) + ' (' + fmtPct(c.totalReturnPct) + ')</span></div>' +
+                    '<div class="bt-summary-row"><span class="label">定投收益</span><span class="value">' + fmtMoney(c.dcaReturn) + '</span></div>' +
+                    '<div class="bt-summary-row"><span class="label">RSI操作收益</span><span class="value">' + fmtMoney(c.rsiReturn) + '</span></div>' +
+                    '<div class="bt-summary-row"><span class="label">MA操作收益</span><span class="value">' + fmtMoney(c.maBuyReturn) + '</span></div>' +
+                    '</div>';
+            }
+
+            summaryDiv.innerHTML = buildCard(resultA, 'a') + buildCard(resultB, 'b');
+
+            var allYears = {};
+            resultA.annuals.forEach(function (a) { allYears[a.year] = (allYears[a.year] || {}); allYears[a.year].a = a; });
+            resultB.annuals.forEach(function (a) { allYears[a.year] = (allYears[a.year] || {}); allYears[a.year].b = a; });
+            var years = Object.keys(allYears).sort();
+
+            var table = '<table><thead><tr><th>年度</th><th>策略A 定投(次/金额)</th><th>策略A RSI(次/金额)</th><th>策略A MA(买/卖)</th><th>策略B 定投(次/金额)</th><th>策略B RSI(次/金额)</th><th>策略B MA(买/卖)</th></tr></thead><tbody>';
+            years.forEach(function (y) {
+                var aa = allYears[y].a || {};
+                var bb = allYears[y].b || {};
+                table += '<tr>' +
+                    '<td>' + y + '</td>' +
+                    '<td>' + (aa.dca || 0) + '次 / ' + fmtMoney(aa.dcaIn || 0) + '</td>' +
+                    '<td>' + (aa.rsi || 0) + '次 / ' + fmtMoney(aa.rsiIn || 0) + '</td>' +
+                    '<td>买' + (aa.ma_buy || 0) + '次 / 卖' + (aa.ma_sell || 0) + '次</td>' +
+                    '<td>' + (bb.dca || 0) + '次 / ' + fmtMoney(bb.dcaIn || 0) + '</td>' +
+                    '<td>' + (bb.rsi || 0) + '次 / ' + fmtMoney(bb.rsiIn || 0) + '</td>' +
+                    '<td>买' + (bb.ma_buy || 0) + '次 / 卖' + (bb.ma_sell || 0) + '次</td>' +
+                    '</tr>';
+            });
+            table += '</tbody></table>';
+            annualDiv.innerHTML = table;
+        }
+
+        document.getElementById('btRun').addEventListener('click', async function () {
+            var startDate = document.getElementById('btStartDate').value;
+            var endDate = document.getElementById('btEndDate').value;
+            if (!startDate || !endDate) return;
+
+            var stocksA = collectStrategy('a');
+            var stocksB = collectStrategy('b');
+
+            var symbols = [];
+            stocksA.forEach(function (s) { if (symbols.indexOf(s.symbol) < 0) symbols.push(s.symbol); });
+            stocksB.forEach(function (s) { if (symbols.indexOf(s.symbol) < 0) symbols.push(s.symbol); });
+
+            var cache = {};
+            for (var i = 0; i < symbols.length; i++) {
+                var sym = symbols[i];
+                if (stockData[sym + '_' + dataRange]) {
+                    cache[sym] = stockData[sym + '_' + dataRange];
+                } else {
+                    var fresh = await fetchStockData([sym], dataRange);
+                    if (fresh[sym]) cache[sym] = fresh[sym];
+                }
+            }
+
+            var resultA = Backtest.runStrategy('策略A', stocksA, cache, startDate, endDate);
+            var resultB = Backtest.runStrategy('策略B', stocksB, cache, startDate, endDate);
+
+            if (resultA && resultB) {
+                showResults(resultA, resultB);
+            }
+        });
+
+        refreshUI();
+        btBody.classList.add('open');
+        btToggle.textContent = '▲';
+    }
+
     async function init() {
         initBackground();
         initCharts();
         initCardEvents();
         initIntervalEvents();
+        initBacktest();
         updateClock();
         setInterval(updateClock, 1000);
 
