@@ -989,40 +989,54 @@
             var amount = parseFloat(row.querySelector('.bt-dca-amount').value) || 0;
 
             var rsiAddCk = row.querySelector('.bt-rsi-add-ck');
+            var rsiAddThr = parseFloat(row.querySelector('.bt-rsi-add-val').value);
+            if (isNaN(rsiAddThr)) rsiAddThr = 30;
+            var rsiAddAmt = parseFloat(row.querySelector('.bt-rsi-add-amt').value);
+            if (isNaN(rsiAddAmt)) rsiAddAmt = 2000;
             var rsiAdd = rsiAddCk && rsiAddCk.checked ? {
                 enabled: true,
-                threshold: parseFloat(row.querySelector('.bt-rsi-add-val').value) || 30,
-                amount: parseFloat(row.querySelector('.bt-rsi-add-amt').value) || 2000
+                threshold: rsiAddThr,
+                amount: rsiAddAmt
             } : null;
 
             var rsiPauseCk = row.querySelector('.bt-rsi-pause-ck');
+            var rsiPauseThr = parseFloat(row.querySelector('.bt-rsi-pause-val').value);
+            if (isNaN(rsiPauseThr)) rsiPauseThr = 70;
             var rsiPause = rsiPauseCk && rsiPauseCk.checked ? {
                 enabled: true,
-                threshold: parseFloat(row.querySelector('.bt-rsi-pause-val').value) || 70
+                threshold: rsiPauseThr
             } : null;
 
             var rsiSellCk = row.querySelector('.bt-rsi-sell-ck');
             var rsiSellRebuyCk = row.querySelector('.bt-rsi-sell-rebuy-ck');
+            var rsiSellPct = parseFloat(row.querySelector('.bt-rsi-sell-pct').value);
+            if (isNaN(rsiSellPct)) rsiSellPct = 50;
+            var rsiSellThr = parseFloat(row.querySelector('.bt-rsi-sell-val').value);
+            if (isNaN(rsiSellThr)) rsiSellThr = 70;
             var rsiSell = rsiSellCk && rsiSellCk.checked ? {
                 enabled: true,
-                threshold: parseFloat(row.querySelector('.bt-rsi-sell-val').value) || 70,
-                percent: parseFloat(row.querySelector('.bt-rsi-sell-pct').value) || 50,
+                threshold: rsiSellThr,
+                percent: rsiSellPct,
                 rebuy: rsiSellRebuyCk && rsiSellRebuyCk.checked
             } : null;
 
             var maAddCk = row.querySelector('.bt-ma-add-ck');
+            var maAddAmt = parseFloat(row.querySelector('.bt-ma-add-amt').value);
+            if (isNaN(maAddAmt)) maAddAmt = 2000;
             var maAdd = maAddCk && maAddCk.checked ? {
                 enabled: true,
                 period: parseInt(row.querySelector('.bt-ma-add-ma').value),
-                amount: parseFloat(row.querySelector('.bt-ma-add-amt').value) || 2000
+                amount: maAddAmt
             } : null;
 
             var maSellCk = row.querySelector('.bt-ma-sell-ck');
             var maSellRebuyCk = row.querySelector('.bt-ma-sell-rebuy-ck');
+            var maSellPct = parseFloat(row.querySelector('.bt-ma-sell-pct').value);
+            if (isNaN(maSellPct)) maSellPct = 50;
             var maSell = maSellCk && maSellCk.checked ? {
                 enabled: true,
                 period: parseInt(row.querySelector('.bt-ma-sell-ma').value),
-                percent: parseFloat(row.querySelector('.bt-ma-sell-pct').value) || 50,
+                percent: maSellPct,
                 rebuy: maSellRebuyCk && maSellRebuyCk.checked
             } : null;
 
