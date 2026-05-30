@@ -12,7 +12,7 @@
     let stockData = {};
     let activeSymbol = 'QQQ';
     let activeInterval = '1d';
-    let dataRange = 'max';
+    let dataRange = '10y';
     let mainChart;
 
     const dom = {
