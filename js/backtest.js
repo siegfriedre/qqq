@@ -114,6 +114,8 @@ var Backtest = (function () {
 
         var maRebuyPool = 0;
         var rsiRebuyPool = 0;
+        var rsiSellTriggered = false;
+        var maSellTriggered = false;
 
         for (var i = 0; i < filtered.dates.length; i++) {
             var ts = filtered.dates[i];
@@ -148,14 +150,20 @@ var Backtest = (function () {
                 transactions.push({ date: toDateStr(ts), type: 'rsi_buy', price: price, shares: addShares, amount: cfg.rsiAdd.amount, cashFlow: -cfg.rsiAdd.amount });
             }
 
-            if (cfg.rsiSell && cfg.rsiSell.enabled && cfg.rsiSell.percent > 0 && rsi6[i] != null && rsi6[i] > cfg.rsiSell.threshold && shares > 0) {
-                var rsiSellShares = shares * (cfg.rsiSell.percent / 100);
-                if (rsiSellShares > 0.0001) {
-                    var rsiSellAmount = rsiSellShares * price;
-                    shares -= rsiSellShares;
-                    cashInvested.rsi_sell_rebuy += rsiSellAmount;
-                    rsiRebuyPool += rsiSellAmount;
-                    transactions.push({ date: toDateStr(ts), type: 'rsi_sell', price: price, shares: rsiSellShares, amount: rsiSellAmount, cashFlow: +rsiSellAmount });
+            if (cfg.rsiSell && cfg.rsiSell.enabled && cfg.rsiSell.percent > 0 && rsi6[i] != null && shares > 0) {
+                if (rsi6[i] > cfg.rsiSell.threshold && !rsiSellTriggered) {
+                    rsiSellTriggered = true;
+                    var rsiSellShares = shares * (cfg.rsiSell.percent / 100);
+                    if (rsiSellShares > 0.0001) {
+                        var rsiSellAmount = rsiSellShares * price;
+                        shares -= rsiSellShares;
+                        cashInvested.rsi_sell_rebuy += rsiSellAmount;
+                        rsiRebuyPool += rsiSellAmount;
+                        transactions.push({ date: toDateStr(ts), type: 'rsi_sell', price: price, shares: rsiSellShares, amount: rsiSellAmount, cashFlow: +rsiSellAmount });
+                    }
+                }
+                if (rsi6[i] < cfg.rsiSell.threshold) {
+                    rsiSellTriggered = false;
                 }
             }
 
@@ -182,7 +190,11 @@ var Backtest = (function () {
             if (cfg.maSell && cfg.maSell.enabled && i > 0) {
                 var maS = maMap[cfg.maSell.period];
                 if (maS && maS[i] != null && maS[i - 1] != null) {
-                    if (cfg.maSell.enabled && cfg.maSell.percent > 0 && filtered.closes[i - 1] >= maS[i - 1] && filtered.closes[i] < maS[i] && shares > 0) {
+                    var crossedDown = filtered.closes[i - 1] >= maS[i - 1] && filtered.closes[i] < maS[i];
+                    var crossedUp = filtered.closes[i - 1] <= maS[i - 1] && filtered.closes[i] > maS[i];
+
+                    if (cfg.maSell.percent > 0 && crossedDown && !maSellTriggered && shares > 0) {
+                        maSellTriggered = true;
                         var sellShares = shares * (cfg.maSell.percent / 100);
                         if (sellShares > 0.0001) {
                             var sellAmount = sellShares * price;
@@ -192,12 +204,15 @@ var Backtest = (function () {
                             transactions.push({ date: toDateStr(ts), type: 'ma_sell', price: price, shares: sellShares, amount: sellAmount, cashFlow: +sellAmount });
                         }
                     }
-                    if (cfg.maSell.rebuy && maRebuyPool > 0 && filtered.closes[i - 1] <= maS[i - 1] && filtered.closes[i] > maS[i]) {
-                        var rebuyShares = maRebuyPool / price;
-                        shares += rebuyShares;
-                        cashInvested.ma_sell_rebuy -= maRebuyPool;
-                        transactions.push({ date: toDateStr(ts), type: 'ma_rebuy', price: price, shares: rebuyShares, amount: maRebuyPool, cashFlow: -maRebuyPool });
-                        maRebuyPool = 0;
+                    if (crossedUp) {
+                        maSellTriggered = false;
+                        if (cfg.maSell.rebuy && maRebuyPool > 0) {
+                            var rebuyShares = maRebuyPool / price;
+                            shares += rebuyShares;
+                            cashInvested.ma_sell_rebuy -= maRebuyPool;
+                            transactions.push({ date: toDateStr(ts), type: 'ma_rebuy', price: price, shares: rebuyShares, amount: maRebuyPool, cashFlow: -maRebuyPool });
+                            maRebuyPool = 0;
+                        }
                     }
                 }
             }
