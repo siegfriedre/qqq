@@ -20,9 +20,7 @@
     user-select: none;
 }
 
-.bt-header:hover {
-    background: rgba(0, 240, 255, 0.03);
-}
+.bt-header:hover { background: rgba(0, 240, 255, 0.03); }
 
 .bt-title {
     font-family: 'Share Tech Mono', monospace;
@@ -35,6 +33,24 @@
     font-family: 'Share Tech Mono', monospace;
     font-size: 20px;
     color: var(--text-dim);
+}
+
+.bt-body { padding: 20px; display: none; }
+.bt-body.open { display: block; }
+
+/* ---- global row ---- */
+.bt-global {
+    display: flex;
+    gap: 16px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+}
+
+.bt-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .bt-field label {
@@ -56,11 +72,54 @@
     outline: none;
 }
 
+.bt-field select:focus,
+.bt-field input:focus { border-color: var(--cyan); }
+
+.bt-field select { cursor: pointer; }
+
+.bt-field input[type="number"] { width: 120px; }
+.bt-field input[type="date"] { color-scheme: dark; width: 160px; }
+.bt-field input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.7); }
+
+/* ---- strategy panels ---- */
+.bt-strategies {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.bt-strategy {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 20px;
+}
+.bt-strategy.bt-a { border-color: rgba(0, 240, 255, 0.2); }
+.bt-strategy.bt-b { border-color: rgba(179, 71, 234, 0.2); }
+
 .bt-strategy-title {
     font-family: 'Orbitron', sans-serif;
     font-size: 18px;
     letter-spacing: 2px;
     margin-bottom: 16px;
+}
+.bt-a .bt-strategy-title { color: var(--cyan); }
+.bt-b .bt-strategy-title { color: var(--magenta); }
+
+/* ---- stock row ---- */
+.bt-stock-row {
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 14px;
+    margin-bottom: 10px;
+    background: rgba(255, 255, 255, 0.01);
+}
+
+.bt-stock-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
 }
 
 .bt-stock-header select {
@@ -79,7 +138,7 @@
 
 .bt-stock-header .bt-remove {
     background: none;
-    border: 1px solid rgba(255,59,92,0.3);
+    border: 1px solid rgba(255, 59, 92, 0.3);
     color: var(--red);
     padding: 6px 14px;
     border-radius: 3px;
@@ -89,34 +148,7 @@
     opacity: 0.6;
     transition: opacity 0.2s;
 }
-
 .bt-stock-header .bt-remove:hover { opacity: 1; }
-
-.bt-add-stock {
-    background: none;
-    border: 1px dashed rgba(255, 255, 255, 0.1);
-    color: var(--text-dim);
-    padding: 8px 14px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 13px;
-    width: 100%;
-    letter-spacing: 1px;
-    transition: all 0.2s;
-}
-
-.bt-strategy-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 16px;
-    letter-spacing: 2px;
-    margin-bottom: 14px;
-}
-
-.bt-add-stock:hover {
-    border-color: var(--cyan);
-    color: var(--cyan);
-}
 
 .bt-stock-fields {
     display: flex;
@@ -125,6 +157,22 @@
     align-items: flex-end;
 }
 
+.bt-add-stock {
+    background: none;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    color: var(--text-dim);
+    padding: 10px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 16px;
+    width: 100%;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+}
+.bt-add-stock:hover { border-color: var(--cyan); color: var(--cyan); }
+
+/* ---- rules ---- */
 .bt-stock-rules {
     margin-top: 12px;
     display: flex;
@@ -135,14 +183,22 @@
 .bt-rule {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 4px;
-    padding: 10px 16px;
+    padding: 8px 14px;
     font-family: 'Share Tech Mono', monospace;
-    font-size: 17px;
+    font-size: 19px;
     color: var(--text-dim);
+}
+
+.bt-rule input[type="checkbox"] {
+    accent-color: var(--cyan);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    flex-shrink: 0;
 }
 
 .bt-rule input[type="number"] {
@@ -169,65 +225,10 @@
     outline: none;
 }
 
-.bt-rule {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 4px;
-    padding: 10px 16px;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 19px;
-    color: var(--text-dim);
-}
+.bt-rule input:focus,
+.bt-rule select:focus { border-color: var(--cyan); }
 
-.bt-rule select {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: #c8d6e5;
-    padding: 8px 10px;
-    border-radius: 3px;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 18px;
-    cursor: pointer;
-    outline: none;
-}
-
-.bt-rule input[type="checkbox"] {
-    accent-color: var(--cyan);
-    width: 16px;
-    height: 16px;
-    cursor: pointer;
-    flex-shrink: 0;
-}
-
-.bt-rule select {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: #c8d6e5;
-    padding: 6px 10px;
-    border-radius: 3px;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 17px;
-    cursor: pointer;
-    outline: none;
-}
-
-.bt-add-stock {
-    background: none;
-    border: 1px dashed rgba(255, 255, 255, 0.1);
-    color: var(--text-dim);
-    padding: 10px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 16px;
-    width: 100%;
-    letter-spacing: 1px;
-    transition: all 0.2s;
-}
-
+/* ---- run button ---- */
 .bt-run {
     background: rgba(0, 240, 255, 0.1);
     border: 1px solid var(--cyan);
@@ -240,93 +241,14 @@
     cursor: pointer;
     transition: all 0.2s;
 }
-
-.bt-rule input[type="number"] {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: #c8d6e5;
-    padding: 5px 8px;
-    border-radius: 3px;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 14px;
-    width: 70px;
-    outline: none;
-}
-
-.bt-rule select {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: #c8d6e5;
-    padding: 5px 8px;
-    border-radius: 3px;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 14px;
-    cursor: pointer;
-    outline: none;
-}
-
-.bt-rule input[type="checkbox"] {
-    accent-color: var(--cyan);
-    width: 13px;
-    height: 13px;
-    cursor: pointer;
-}
-
-.bt-rule input[type="number"] {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: #c8d6e5;
-    padding: 3px 6px;
-    border-radius: 3px;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 10px;
-    width: 60px;
-    outline: none;
-}
-
-.bt-rule select {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: #c8d6e5;
-    padding: 3px 6px;
-    border-radius: 3px;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 10px;
-    cursor: pointer;
-    outline: none;
-}
-
-.bt-rule input:focus,
-.bt-rule select:focus {
-    border-color: var(--cyan);
-}
-
-.bt-run {
-    background: rgba(0, 240, 255, 0.1);
-    border: 1px solid var(--cyan);
-    color: var(--cyan);
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 16px;
-    letter-spacing: 4px;
-    padding: 12px 36px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
 .bt-run:hover {
     background: rgba(0, 240, 255, 0.2);
     box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
 }
 
-.bt-results {
-    margin-top: 20px;
-    display: none;
-}
-
-.bt-results.show {
-    display: block;
-}
+/* ---- results ---- */
+.bt-results { margin-top: 20px; display: none; }
+.bt-results.show { display: block; }
 
 .bt-summary {
     display: grid;
@@ -341,7 +263,6 @@
     border-radius: 8px;
     padding: 16px;
 }
-
 .bt-summary-card.a { border-left: 3px solid var(--cyan); }
 .bt-summary-card.b { border-left: 3px solid var(--magenta); }
 
@@ -351,26 +272,39 @@
     letter-spacing: 2px;
     margin-bottom: 16px;
 }
+.bt-summary-card.a .bt-summary-title { color: var(--cyan); }
+.bt-summary-card.b .bt-summary-title { color: var(--magenta); }
 
 .bt-summary-row {
     display: flex;
     justify-content: space-between;
-    padding: 6px 0;
-    font-size: 18px;
+    padding: 5px 0;
+    font-size: 17px;
 }
-
+.bt-summary-row .label {
+    color: var(--text-dim);
+    font-family: 'Share Tech Mono', monospace;
+}
 .bt-summary-row .value {
     font-family: 'Share Tech Mono', monospace;
     color: #c8d6e5;
-    font-size: 19px;
+    font-size: 18px;
 }
+.bt-summary-row .value.up { color: var(--green); }
+.bt-summary-row .value.down { color: var(--red); }
 
 .bt-summary-row.total {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
-    margin-top: 10px;
-    padding-top: 12px;
+    margin-top: 8px;
+    padding-top: 10px;
     font-weight: bold;
-    font-size: 22px;
+    font-size: 20px;
+}
+
+/* ---- stock detail ---- */
+.bt-stock-detail {
+    margin-bottom: 16px;
+    overflow-x: auto;
 }
 
 .bt-stock-detail-title {
@@ -380,6 +314,8 @@
     letter-spacing: 2px;
     margin-bottom: 10px;
 }
+.bt-stock-detail.bt-a .bt-stock-detail-title { color: var(--cyan); }
+.bt-stock-detail.bt-b .bt-stock-detail-title { color: var(--magenta); }
 
 .bt-stock-detail table {
     width: 100%;
@@ -388,7 +324,6 @@
     font-size: 17px;
     min-width: 900px;
 }
-
 .bt-stock-detail th {
     text-align: left;
     color: var(--text-dim);
@@ -397,7 +332,6 @@
     white-space: nowrap;
     font-size: 17px;
 }
-
 .bt-stock-detail td {
     padding: 8px 12px;
     color: #c8d6e5;
@@ -405,14 +339,16 @@
     white-space: nowrap;
     font-size: 18px;
 }
+.bt-stock-detail td.up { color: var(--green); }
+.bt-stock-detail td.down { color: var(--red); }
 
+/* ---- annual table ---- */
 .bt-annual table {
     width: 100%;
     border-collapse: collapse;
     font-family: 'Share Tech Mono', monospace;
     font-size: 17px;
 }
-
 .bt-annual th {
     text-align: left;
     color: var(--text-dim);
@@ -421,134 +357,20 @@
     letter-spacing: 1px;
     font-size: 17px;
 }
-
 .bt-annual td {
     padding: 9px 14px;
     color: #c8d6e5;
     border-bottom: 1px solid rgba(255, 255, 255, 0.03);
     font-size: 18px;
 }
-
-.bt-summary-card.a .bt-summary-title { color: var(--cyan); }
-.bt-summary-card.b .bt-summary-title { color: var(--magenta); }
-
-.bt-summary-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 4px 0;
-    font-size: 13px;
-}
-
-.bt-summary-row .label {
-    color: var(--text-dim);
-    font-family: 'Share Tech Mono', monospace;
-}
-
-.bt-summary-row .value {
-    font-family: 'Share Tech Mono', monospace;
-    color: #c8d6e5;
-    font-size: 14px;
-}
-
-.bt-summary-row .value.up { color: var(--green); }
-.bt-summary-row .value.down { color: var(--red); }
-
-.bt-summary-row.total {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    margin-top: 8px;
-    padding-top: 10px;
-    font-weight: bold;
-    font-size: 15px;
-}
-
-.bt-annual table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 12px;
-}
-
-.bt-annual th {
-    text-align: left;
-    color: var(--text-dim);
-    padding: 7px 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    letter-spacing: 1px;
-    font-size: 12px;
-}
-
-.bt-annual td {
-    padding: 6px 10px;
-    color: #c8d6e5;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-    font-size: 13px;
-}
-
 .bt-annual td.up { color: var(--green); }
 .bt-annual td.down { color: var(--red); }
 
-.bt-stock-detail {
-    margin-bottom: 16px;
-    overflow-x: auto;
-}
-
-.bt-stock-detail-title {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 11px;
-    color: var(--text-dim);
-    letter-spacing: 2px;
-    margin-bottom: 8px;
-}
-
-.bt-stock-detail.bt-a .bt-stock-detail-title { color: var(--cyan); }
-.bt-stock-detail.bt-b .bt-stock-detail-title { color: var(--magenta); }
-
-.bt-stock-detail table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 12px;
-    min-width: 800px;
-}
-
-.bt-stock-detail th {
-    text-align: left;
-    color: var(--text-dim);
-    padding: 6px 8px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    white-space: nowrap;
-    font-size: 12px;
-}
-
-.bt-stock-detail td {
-    padding: 5px 8px;
-    color: #c8d6e5;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-    white-space: nowrap;
-    font-size: 13px;
-}
-
-.bt-stock-detail td.up { color: var(--green); }
-.bt-stock-detail td.down { color: var(--red); }
-
+/* ---- responsive ---- */
 @media (max-width: 768px) {
-    .bt-strategies {
-        grid-template-columns: 1fr;
-    }
-    .bt-summary {
-        grid-template-columns: 1fr;
-    }
-    .bt-stock-fields {
-        flex-direction: column;
-    }
-    .bt-stock-rules {
-        flex-direction: column;
-    }
-.bt-global {
-    display: flex;
-    gap: 16px;
-    align-items: flex-end;
-    flex-wrap: wrap;
-    margin-bottom: 24px;
-}
+    .bt-strategies { grid-template-columns: 1fr; }
+    .bt-summary { grid-template-columns: 1fr; }
+    .bt-stock-fields { flex-direction: column; }
+    .bt-stock-rules { flex-direction: column; }
+    .bt-global { flex-direction: column; }
 }
