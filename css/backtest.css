@@ -26,43 +26,20 @@
 
 .bt-title {
     font-family: 'Share Tech Mono', monospace;
-    font-size: 15px;
+    font-size: 18px;
     color: var(--cyan);
     letter-spacing: 3px;
 }
 
 .bt-toggle {
     font-family: 'Share Tech Mono', monospace;
-    font-size: 16px;
+    font-size: 20px;
     color: var(--text-dim);
-}
-
-.bt-body {
-    padding: 20px;
-    display: none;
-}
-
-.bt-body.open {
-    display: block;
-}
-
-.bt-global {
-    display: flex;
-    gap: 12px;
-    align-items: flex-end;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-}
-
-.bt-field {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
 }
 
 .bt-field label {
     font-family: 'Share Tech Mono', monospace;
-    font-size: 13px;
+    font-size: 16px;
     color: var(--text-dim);
     letter-spacing: 2px;
 }
@@ -72,89 +49,28 @@
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.08);
     color: #c8d6e5;
-    padding: 8px 12px;
+    padding: 10px 14px;
     border-radius: 4px;
     font-family: 'Share Tech Mono', monospace;
-    font-size: 16px;
+    font-size: 19px;
     outline: none;
-}
-
-.bt-field select:focus,
-.bt-field input:focus {
-    border-color: var(--cyan);
-}
-
-.bt-field select {
-    cursor: pointer;
-}
-
-.bt-field input[type="number"] {
-    width: 100px;
-}
-
-.bt-field input[type="date"] {
-    color-scheme: dark;
-    width: 140px;
-}
-
-.bt-field input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(0.7);
-}
-
-.bt-strategies {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 20px;
-}
-
-.bt-strategy {
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 8px;
-    padding: 16px;
-}
-
-.bt-strategy.bt-a {
-    border-color: rgba(0, 240, 255, 0.2);
-}
-
-.bt-strategy.bt-b {
-    border-color: rgba(179, 71, 234, 0.2);
 }
 
 .bt-strategy-title {
     font-family: 'Orbitron', sans-serif;
-    font-size: 13px;
+    font-size: 20px;
     letter-spacing: 2px;
     margin-bottom: 14px;
-}
-
-.bt-a .bt-strategy-title { color: var(--cyan); }
-.bt-b .bt-strategy-title { color: var(--magenta); }
-
-.bt-stock-row {
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 6px;
-    padding: 12px;
-    margin-bottom: 10px;
-    background: rgba(255, 255, 255, 0.01);
-}
-
-.bt-stock-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
 }
 
 .bt-stock-header select {
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: #fff;
-    padding: 6px 12px;
+    padding: 8px 14px;
     border-radius: 3px;
     font-family: 'Orbitron', sans-serif;
-    font-size: 18px;
+    font-size: 22px;
     font-weight: 700;
     cursor: pointer;
     outline: none;
@@ -164,11 +80,11 @@
     background: none;
     border: 1px solid rgba(255,59,92,0.3);
     color: var(--red);
-    padding: 4px 10px;
+    padding: 6px 14px;
     border-radius: 3px;
     cursor: pointer;
     font-family: 'Share Tech Mono', monospace;
-    font-size: 14px;
+    font-size: 18px;
     opacity: 0.6;
     transition: opacity 0.2s;
 }
@@ -218,14 +134,65 @@
 .bt-rule {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 4px;
-    padding: 8px 14px;
+    padding: 10px 16px;
     font-family: 'Share Tech Mono', monospace;
-    font-size: 14px;
+    font-size: 17px;
     color: var(--text-dim);
+}
+
+.bt-rule input[type="number"] {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #c8d6e5;
+    padding: 6px 10px;
+    border-radius: 3px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 17px;
+    width: 80px;
+    outline: none;
+}
+
+.bt-rule select {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #c8d6e5;
+    padding: 6px 10px;
+    border-radius: 3px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 17px;
+    cursor: pointer;
+    outline: none;
+}
+
+.bt-add-stock {
+    background: none;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    color: var(--text-dim);
+    padding: 10px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 16px;
+    width: 100%;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+}
+
+.bt-run {
+    background: rgba(0, 240, 255, 0.1);
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 20px;
+    letter-spacing: 4px;
+    padding: 14px 44px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
 .bt-rule input[type="number"] {
@@ -334,86 +301,86 @@
 
 .bt-summary-title {
     font-family: 'Orbitron', sans-serif;
-    font-size: 16px;
+    font-size: 20px;
     letter-spacing: 2px;
-    margin-bottom: 14px;
+    margin-bottom: 16px;
 }
 
 .bt-summary-row {
     display: flex;
     justify-content: space-between;
-    padding: 5px 0;
-    font-size: 15px;
+    padding: 6px 0;
+    font-size: 18px;
 }
 
 .bt-summary-row .value {
     font-family: 'Share Tech Mono', monospace;
     color: #c8d6e5;
-    font-size: 16px;
+    font-size: 19px;
 }
 
 .bt-summary-row.total {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
-    margin-top: 8px;
-    padding-top: 10px;
+    margin-top: 10px;
+    padding-top: 12px;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 22px;
 }
 
 .bt-stock-detail-title {
     font-family: 'Share Tech Mono', monospace;
-    font-size: 14px;
+    font-size: 17px;
     color: var(--text-dim);
     letter-spacing: 2px;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 
 .bt-stock-detail table {
     width: 100%;
     border-collapse: collapse;
     font-family: 'Share Tech Mono', monospace;
-    font-size: 14px;
-    min-width: 800px;
+    font-size: 17px;
+    min-width: 900px;
 }
 
 .bt-stock-detail th {
     text-align: left;
     color: var(--text-dim);
-    padding: 7px 10px;
+    padding: 9px 12px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     white-space: nowrap;
-    font-size: 14px;
+    font-size: 17px;
 }
 
 .bt-stock-detail td {
-    padding: 6px 10px;
+    padding: 8px 12px;
     color: #c8d6e5;
     border-bottom: 1px solid rgba(255, 255, 255, 0.03);
     white-space: nowrap;
-    font-size: 15px;
+    font-size: 18px;
 }
 
 .bt-annual table {
     width: 100%;
     border-collapse: collapse;
     font-family: 'Share Tech Mono', monospace;
-    font-size: 14px;
+    font-size: 17px;
 }
 
 .bt-annual th {
     text-align: left;
     color: var(--text-dim);
-    padding: 8px 12px;
+    padding: 10px 14px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     letter-spacing: 1px;
-    font-size: 14px;
+    font-size: 17px;
 }
 
 .bt-annual td {
-    padding: 7px 12px;
+    padding: 9px 14px;
     color: #c8d6e5;
     border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-    font-size: 15px;
+    font-size: 18px;
 }
 
 .bt-summary-card.a .bt-summary-title { color: var(--cyan); }
