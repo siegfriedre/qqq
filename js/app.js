@@ -1119,7 +1119,7 @@
                 if (!r.stocks.length) return '';
                 var cls = key === 'a' ? 'bt-a' : 'bt-b';
                 var html = '<div class="bt-stock-detail ' + cls + '"><div class="bt-stock-detail-title">[ ' + r.name + ' ] 各股票明细</div><table>' +
-                    '<thead><tr><th>股票</th><th>持仓(股)</th><th>现价</th><th>市值</th><th>定投投入</th><th>定投次数</th><th>RSI加仓</th><th>RSI次数</th><th>MA加仓</th><th>MA卖出</th><th>总收益</th></tr></thead><tbody>';
+                    '<thead><tr><th>股票</th><th>持仓(股)</th><th>现价</th><th>市值</th><th>定投投入</th><th>定投次</th><th>RSI加仓</th><th>RSI次</th><th>MA加仓</th><th>MA卖出</th><th>总收益</th><th>收益率</th></tr></thead><tbody>';
                 r.stocks.forEach(function (s) {
                     var dcaCount = 0, rsiCount = 0, maBuyCount = 0, maSellCount = 0;
                     s.transactions.forEach(function (t) {
@@ -1129,6 +1129,7 @@
                         if (t.type === 'ma_sell') maSellCount++;
                     });
                     var sReturn = s.currentValue - (s.totalInvested - s.maSellProceeds);
+                    var sReturnPct = (s.totalInvested - s.maSellProceeds) > 0 ? (sReturn / (s.totalInvested - s.maSellProceeds) * 100) : 0;
                     html += '<tr>' +
                         '<td><b>' + s.symbol + '</b></td>' +
                         '<td>' + Number(s.shares).toFixed(3) + '</td>' +
@@ -1141,6 +1142,7 @@
                         '<td>' + fmtMoney(s.cashInvested.ma_buy) + '</td>' +
                         '<td>' + fmtMoney(s.cashInvested.ma_sell_proceeds) + '</td>' +
                         '<td class="' + fmtCls(sReturn) + '">' + fmtMoney(sReturn) + '</td>' +
+                        '<td class="' + fmtCls(sReturnPct) + '">' + fmtPct(sReturnPct) + '</td>' +
                         '</tr>';
                 });
                 html += '</tbody></table></div>';
