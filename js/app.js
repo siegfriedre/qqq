@@ -154,21 +154,27 @@
         const ma20Data = ma20.map(function (v, i) { return v != null ? [dates[i], v] : null; }).filter(Boolean);
         const ma60Data = ma60.map(function (v, i) { return v != null ? [dates[i], v] : null; }).filter(Boolean);
 
+        const GREEN_FILL = '#009966';
+        const GREEN_BORDER = '#00b87a';
+        const RED_BORDER = '#e83c4c';
+        const RED_FILL = 'rgba(10, 16, 36, 0.55)';
+
         const volData = volumes.map(function (v, i) {
             var open = ohlc[i] ? ohlc[i].value[1] : 0;
             var close = ohlc[i] ? ohlc[i].value[2] : 0;
+            var isUp = close >= open;
             return {
                 value: [dates[i], v],
                 itemStyle: {
-                    color: close >= open ? 'rgba(0,255,136,0.5)' : 'rgba(255,59,92,0.5)',
-                    borderColor: close >= open ? '#00ff88' : '#ff3b5c',
-                    borderWidth: 0.5
+                    color: isUp ? GREEN_FILL : RED_FILL,
+                    borderColor: isUp ? GREEN_BORDER : RED_BORDER,
+                    borderWidth: 1
                 }
             };
         });
 
         var isUp = closes.length >= 2 && closes[closes.length - 1] >= closes[closes.length - 2];
-        var accentColor = isUp ? '#00ff88' : '#ff3b5c';
+        var accentColor = isUp ? GREEN_BORDER : RED_BORDER;
 
         var option = {
             backgroundColor: 'transparent',
@@ -231,10 +237,10 @@
                     yAxisIndex: 0,
                     data: ohlc,
                     itemStyle: {
-                        color: '#00ff88',
-                        color0: '#ff3b5c',
-                        borderColor: '#00ff88',
-                        borderColor0: '#ff3b5c',
+                        color: GREEN_FILL,
+                        color0: RED_FILL,
+                        borderColor: GREEN_BORDER,
+                        borderColor0: RED_BORDER,
                         borderWidth: 1
                     },
                     emphasis: {
