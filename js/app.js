@@ -28,7 +28,9 @@
             high52: document.getElementById('stat-52h'),
             low52: document.getElementById('stat-52l'),
             vol: document.getElementById('stat-vol'),
-            avgVol: document.getElementById('stat-avgvol')
+            sma200: document.getElementById('stat-sma200'),
+            drawdown: document.getElementById('stat-drawdown'),
+            maxgain: document.getElementById('stat-maxgain')
         }
     };
 
@@ -112,6 +114,34 @@
         return result;
     }
 
+    function calcMaxDrawdown(closes) {
+        if (!closes || closes.length < 2) return null;
+        var peak = closes[0];
+        var maxDD = 0;
+        for (var i = 1; i < closes.length; i++) {
+            if (closes[i] > peak) {
+                peak = closes[i];
+            }
+            var dd = (peak - closes[i]) / peak * 100;
+            if (dd > maxDD) maxDD = dd;
+        }
+        return maxDD;
+    }
+
+    function calcMaxGain(closes) {
+        if (!closes || closes.length < 2) return null;
+        var trough = closes[0];
+        var maxGain = 0;
+        for (var i = 1; i < closes.length; i++) {
+            if (closes[i] < trough) {
+                trough = closes[i];
+            }
+            var gain = (closes[i] - trough) / trough * 100;
+            if (gain > maxGain) maxGain = gain;
+        }
+        return maxGain;
+    }
+
     function buildCandlestickData(result) {
         const timestamps = result.timestamp || [];
         const quote = result.indicators?.quote?.[0];
@@ -153,6 +183,9 @@
         const ma10Data = ma10.map(function (v, i) { return v != null ? [dates[i], v] : null; }).filter(Boolean);
         const ma20Data = ma20.map(function (v, i) { return v != null ? [dates[i], v] : null; }).filter(Boolean);
         const ma60Data = ma60.map(function (v, i) { return v != null ? [dates[i], v] : null; }).filter(Boolean);
+
+        const sma200 = calcMA(closes, 200);
+        const sma200Data = sma200.map(function (v, i) { return v != null ? [dates[i], v] : null; }).filter(Boolean);
 
         const GREEN_FILL = '#009966';
         const GREEN_BORDER = '#00b87a';
@@ -297,6 +330,17 @@
                     emphasis: { focus: 'series' }
                 },
                 {
+                    name: 'SMA200',
+                    type: 'line',
+                    xAxisIndex: 0,
+                    yAxisIndex: 0,
+                    data: sma200Data,
+                    smooth: true,
+                    symbol: 'none',
+                    lineStyle: { width: 1.5, color: '#ffd700', opacity: 0.7 },
+                    emphasis: { focus: 'series' }
+                },
+                {
                     name: 'Volume',
                     type: 'bar',
                     xAxisIndex: 1,
@@ -371,6 +415,7 @@
             const opens = quote.open || [];
             const highs = quote.high || [];
             const lows = quote.low || [];
+            const closes = quote.close || [];
             const volumes = quote.volume || [];
             const lastIdx = opens.length - 1;
 
@@ -380,12 +425,10 @@
             const lastVol = lastIdx >= 0 ? volumes[lastIdx] : null;
 
             const prevClose = meta.previousClose || meta.chartPreviousClose || null;
-            const regularPrice = meta.regularMarketPrice || null;
             const dayHigh = meta.regularMarketDayHigh || lastHigh;
             const dayLow = meta.regularMarketDayLow || lastLow;
             const high52 = meta.fiftyTwoWeekHigh || null;
             const low52 = meta.fiftyTwoWeekLow || null;
-            const avgVol3m = meta.regularMarketVolume3MonthAvg || meta.averageDailyVolume3Month || null;
 
             dom.stats.open.textContent = lastOpen != null ? '$' + formatPrice(lastOpen) : '--';
             dom.stats.prev.textContent = prevClose != null ? '$' + formatPrice(prevClose) : '--';
@@ -394,7 +437,17 @@
             dom.stats.high52.textContent = high52 != null ? '$' + formatPrice(high52) : '--';
             dom.stats.low52.textContent = low52 != null ? '$' + formatPrice(low52) : '--';
             dom.stats.vol.textContent = lastVol != null ? formatVolume(lastVol) : '--';
-            dom.stats.avgVol.textContent = avgVol3m != null ? formatVolume(avgVol3m) : '--';
+
+            var sma200 = calcMA(closes, 200);
+            var sma200Valid = sma200.filter(function (v) { return v != null; });
+            var sma200Val = sma200Valid.length > 0 ? sma200Valid[sma200Valid.length - 1] : null;
+            dom.stats.sma200.textContent = sma200Val != null ? '$' + formatPrice(sma200Val) : '--';
+
+            var maxDrawdown = calcMaxDrawdown(closes);
+            dom.stats.drawdown.textContent = maxDrawdown != null ? '-' + maxDrawdown.toFixed(2) + '%' : '--';
+
+            var maxGain = calcMaxGain(closes);
+            dom.stats.maxgain.textContent = maxGain != null ? '+' + maxGain.toFixed(2) + '%' : '--';
 
             if (dayHigh != null && prevClose != null && dayHigh >= prevClose) {
                 dom.stats.high.className = 'stat-value up';
