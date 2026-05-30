@@ -384,23 +384,68 @@
 
 /* ---- responsive ---- */
 @media (max-width: 768px) {
+    .bt-title { font-size: 14px; }
+    .bt-toggle { font-size: 16px; }
+    .bt-header { padding: 12px 14px; }
+    .bt-body { padding: 10px; }
     .bt-strategies { grid-template-columns: 1fr; }
     .bt-summary { grid-template-columns: 1fr; }
-    .bt-stock-fields { flex-direction: column; gap: 10px; }
-    .bt-stock-rules { flex-direction: column; }
-    .bt-global { flex-direction: column; gap: 10px; }
+    .bt-global { flex-direction: column; gap: 8px; }
+    .bt-field label { font-size: 12px; }
+    .bt-field select, .bt-field input { font-size: 15px; padding: 8px 10px; }
     .bt-field input[type="date"] { width: 100%; }
     .bt-field input[type="number"] { width: 100%; }
     .bt-field select { width: 100%; }
-    .bt-stock-detail { overflow-x: scroll; }
-    .bt-annual { overflow-x: scroll; }
+    .bt-strategy { padding: 12px; }
+    .bt-strategy-title { font-size: 15px; }
+    .bt-stock-row { padding: 10px; }
     .bt-stock-header { flex-wrap: wrap; }
-    .bt-stock-header select { font-size: 16px; padding: 6px 10px; }
-    .bt-rule { font-size: 16px; flex-wrap: wrap; }
-    .bt-rule input[type="number"] { font-size: 16px; width: 80px; }
-    .bt-rule select { font-size: 16px; }
-    .bt-body { padding: 12px; }
-    .bt-strategy { padding: 14px; }
-    .bt-run { width: 100%; text-align: center; }
+    .bt-stock-header select { font-size: 15px; padding: 5px 8px; }
+    .bt-stock-header .bt-remove { font-size: 14px; padding: 4px 10px; }
+    .bt-stock-fields { flex-direction: column; gap: 8px; }
+    .bt-stock-rules { flex-direction: column; gap: 6px; }
+    .bt-rule { font-size: 14px; padding: 6px 10px; gap: 6px; }
+    .bt-rule input[type="number"] { font-size: 14px; width: 60px; padding: 5px 6px; }
+    .bt-rule select { font-size: 14px; padding: 5px 6px; }
+    .bt-rule input[type="checkbox"] { width: 14px; height: 14px; }
+    .bt-add-stock { font-size: 13px; padding: 8px 12px; }
+    .bt-run { font-size: 15px; padding: 10px 24px; width: 100%; text-align: center; }
+    .bt-summary-title { font-size: 16px; }
+    .bt-summary-row { font-size: 14px; }
+    .bt-summary-row .value { font-size: 15px; }
+    .bt-summary-row.total { font-size: 17px; }
+    .bt-stock-detail { overflow-x: scroll; }
+    .bt-stock-detail-title { font-size: 14px; }
+    .bt-stock-detail table { font-size: 13px; min-width: 650px; }
+    .bt-stock-detail th { font-size: 13px; padding: 5px 6px; }
+    .bt-stock-detail td { font-size: 14px; padding: 4px 6px; }
+    .bt-annual { overflow-x: scroll; }
+    .bt-annual table { font-size: 13px; }
+    .bt-annual th { font-size: 13px; padding: 5px 6px; }
+    .bt-annual td { font-size: 14px; padding: 4px 6px; }
+    .bt-winner-badge { font-size: 10px; padding: 1px 6px; }
+}
+
+@media (max-width: 480px) {
+    .bt-title { font-size: 13px; }
+    .bt-field label { font-size: 11px; }
+    .bt-field select, .bt-field input { font-size: 14px; padding: 6px 8px; }
+    .bt-strategy-title { font-size: 14px; }
+    .bt-stock-header select { font-size: 14px; }
+    .bt-rule { font-size: 13px; padding: 5px 8px; }
+    .bt-rule input[type="number"] { font-size: 13px; width: 50px; padding: 4px 5px; }
+    .bt-rule select { font-size: 13px; padding: 4px 5px; }
+    .bt-add-stock { font-size: 12px; }
+    .bt-run { font-size: 14px; padding: 8px 20px; }
+    .bt-summary-title { font-size: 14px; }
+    .bt-summary-row { font-size: 13px; }
+    .bt-summary-row .value { font-size: 14px; }
+    .bt-summary-row.total { font-size: 15px; }
+    .bt-stock-detail table { font-size: 11px; min-width: 550px; }
+    .bt-stock-detail th { font-size: 11px; padding: 4px 5px; }
+    .bt-stock-detail td { font-size: 12px; padding: 3px 5px; }
+    .bt-annual table { font-size: 11px; }
+    .bt-annual th { font-size: 11px; padding: 4px 5px; }
+    .bt-annual td { font-size: 12px; padding: 3px 5px; }
 }
 
