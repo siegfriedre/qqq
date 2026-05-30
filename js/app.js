@@ -536,6 +536,7 @@
                 trigger: 'axis',
                 axisPointer: {
                     type: 'cross',
+                    link: [{ xAxisIndex: [0, 1, 2] }],
                     crossStyle: { color: 'rgba(255,255,255,0.1)' },
                     lineStyle: { color: 'rgba(0,240,255,0.3)', width: 1, type: 'dashed' },
                     label: {
@@ -573,6 +574,11 @@
                                 'H: <span style="color:#00ff88;">' + formatPrice(d[4]) + '</span> ' +
                                 'L: <span style="color:#ff3b5c;">' + formatPrice(d[3]) + '</span> ' +
                                 'C: <span style="color:#c8d6e5;">' + formatPrice(d[2]) + '</span></div>';
+                        } else if (/^RSI/.test(p.seriesName)) {
+                            var v = Array.isArray(p.value) ? p.value[1] : p.value;
+                            html += '<div><span style="color:' + p.color + ';">●</span> ' +
+                                p.seriesName + ': <span style="color:#c8d6e5;">' +
+                                (v != null ? v.toFixed(1) : '--') + '</span></div>';
                         } else if (p.value != null) {
                             var v = Array.isArray(p.value) ? p.value[1] : p.value;
                             html += '<div><span style="color:' + p.color + ';">●</span> ' +
