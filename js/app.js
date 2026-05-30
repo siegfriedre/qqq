@@ -307,6 +307,19 @@
         var isUp = closes.length >= 2 && closes[closes.length - 1] >= closes[closes.length - 2];
         var accentColor = isUp ? GREEN_BORDER : RED_BORDER;
 
+        var rsi6Arr = calcRSI(closes, 6);
+        var rsi12Arr = calcRSI(closes, 12);
+        var rsi24Arr = calcRSI(closes, 24);
+        var rsiMap = {};
+        for (var i = 0; i < dates.length; i++) {
+            if (rsi6Arr[i] == null && rsi12Arr[i] == null && rsi24Arr[i] == null) continue;
+            rsiMap[dates[i]] = {
+                r6: rsi6Arr[i],
+                r12: rsi12Arr[i],
+                r24: rsi24Arr[i]
+            };
+        }
+
         var option = {
             backgroundColor: 'transparent',
             grid: [
@@ -466,7 +479,7 @@
                     type: 'line',
                     xAxisIndex: 2,
                     yAxisIndex: 2,
-                    data: calcRSI(closes, 6).map(function (v, i) { return v != null ? [dates[i], v] : null; }).filter(Boolean),
+                    data: rsi6Arr.map(function (v, i) { return v != null ? [dates[i], v] : null; }).filter(Boolean),
                     symbol: 'none',
                     lineStyle: { width: 1, color: '#f5a623', opacity: 0.85 },
                     emphasis: { focus: 'series' }
@@ -476,7 +489,7 @@
                     type: 'line',
                     xAxisIndex: 2,
                     yAxisIndex: 2,
-                    data: calcRSI(closes, 12).map(function (v, i) { return v != null ? [dates[i], v] : null; }).filter(Boolean),
+                    data: rsi12Arr.map(function (v, i) { return v != null ? [dates[i], v] : null; }).filter(Boolean),
                     symbol: 'none',
                     lineStyle: { width: 1, color: '#00d2ff', opacity: 0.85 },
                     emphasis: { focus: 'series' }
@@ -486,7 +499,7 @@
                     type: 'line',
                     xAxisIndex: 2,
                     yAxisIndex: 2,
-                    data: calcRSI(closes, 24).map(function (v, i) { return v != null ? [dates[i], v] : null; }).filter(Boolean),
+                    data: rsi24Arr.map(function (v, i) { return v != null ? [dates[i], v] : null; }).filter(Boolean),
                     symbol: 'none',
                     lineStyle: { width: 1, color: '#b347ea', opacity: 0.85 },
                     emphasis: { focus: 'series' },
@@ -563,6 +576,14 @@
                         String(d.getMonth() + 1).padStart(2, '0') + '/' +
                         String(d.getDate()).padStart(2, '0');
                     var html = '<div style="padding:4px 0;color:#00f0ff;font-weight:bold;">' + dateStr + '</div>';
+                    var rsi = rsiMap[ts];
+                    if (rsi) {
+                        html += '<div style="padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);margin-bottom:4px;">' +
+                            '<span style="color:#f5a623;">RSI6</span> <span style="color:#c8d6e5;">' + (rsi.r6 != null ? rsi.r6.toFixed(1) : '--') + '</span>  ' +
+                            '<span style="color:#00d2ff;">RSI12</span> <span style="color:#c8d6e5;">' + (rsi.r12 != null ? rsi.r12.toFixed(1) : '--') + '</span>  ' +
+                            '<span style="color:#b347ea;">RSI24</span> <span style="color:#c8d6e5;">' + (rsi.r24 != null ? rsi.r24.toFixed(1) : '--') + '</span>' +
+                            '</div>';
+                    }
                     params.forEach(function (p) {
                         if (p.seriesName === 'Volume') {
                             var v = p.value ? p.value[1] : 0;
