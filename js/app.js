@@ -471,7 +471,7 @@
                     emphasis: { focus: 'series' }
                 },
                 {
-                    name: 'SMA200',
+                    name: 'MA200',
                     type: 'line',
                     xAxisIndex: 0,
                     yAxisIndex: 0,
