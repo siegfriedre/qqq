@@ -303,9 +303,9 @@
 
 .bt-summary-title {
     font-family: 'Orbitron', sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     letter-spacing: 2px;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
 }
 
 .bt-summary-card.a .bt-summary-title { color: var(--cyan); }
@@ -314,8 +314,8 @@
 .bt-summary-row {
     display: flex;
     justify-content: space-between;
-    padding: 3px 0;
-    font-size: 11px;
+    padding: 4px 0;
+    font-size: 13px;
 }
 
 .bt-summary-row .label {
@@ -326,37 +326,41 @@
 .bt-summary-row .value {
     font-family: 'Share Tech Mono', monospace;
     color: #c8d6e5;
+    font-size: 14px;
 }
 
 .bt-summary-row .value.up { color: var(--green); }
 .bt-summary-row .value.down { color: var(--red); }
 
 .bt-summary-row.total {
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-    margin-top: 6px;
-    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 8px;
+    padding-top: 10px;
     font-weight: bold;
+    font-size: 15px;
 }
 
 .bt-annual table {
     width: 100%;
     border-collapse: collapse;
     font-family: 'Share Tech Mono', monospace;
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .bt-annual th {
     text-align: left;
     color: var(--text-dim);
-    padding: 6px 10px;
+    padding: 7px 10px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     letter-spacing: 1px;
+    font-size: 12px;
 }
 
 .bt-annual td {
-    padding: 5px 10px;
+    padding: 6px 10px;
     color: #c8d6e5;
     border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    font-size: 13px;
 }
 
 .bt-annual td.up { color: var(--green); }
@@ -382,23 +386,25 @@
     width: 100%;
     border-collapse: collapse;
     font-family: 'Share Tech Mono', monospace;
-    font-size: 10px;
+    font-size: 12px;
     min-width: 800px;
 }
 
 .bt-stock-detail th {
     text-align: left;
     color: var(--text-dim);
-    padding: 5px 8px;
+    padding: 6px 8px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     white-space: nowrap;
+    font-size: 12px;
 }
 
 .bt-stock-detail td {
-    padding: 4px 8px;
+    padding: 5px 8px;
     color: #c8d6e5;
     border-bottom: 1px solid rgba(255, 255, 255, 0.03);
     white-space: nowrap;
+    font-size: 13px;
 }
 
 .bt-stock-detail td.up { color: var(--green); }
