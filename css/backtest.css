@@ -395,7 +395,6 @@
         gap: 8px;
         align-items: end;
     }
-    .bt-global .bt-field:last-of-type { display: none; }
 
     .bt-field label { font-size: 12px; }
     .bt-field select, .bt-field input { font-size: 15px; padding: 8px 10px; }
