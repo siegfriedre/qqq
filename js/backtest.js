@@ -187,7 +187,14 @@ var Backtest = (function () {
             if (cfg.rsiSell && cfg.rsiSell.rebuy && rsiRebuyPool > 0 && rsi6[i] != null && rsi6[i] < cfg.rsiSell.threshold) {
                 var rsiRebuyShares = rsiRebuyPool / price;
                 shares += rsiRebuyShares;
-                strategyShares.rsi += rsiRebuyShares;
+                var stratTotal = strategyShares.dca + strategyShares.rsi + strategyShares.ma;
+                if (stratTotal > 0.0001) {
+                    strategyShares.dca += strategyShares.dca / stratTotal * rsiRebuyShares;
+                    strategyShares.rsi += strategyShares.rsi / stratTotal * rsiRebuyShares;
+                    strategyShares.ma += strategyShares.ma / stratTotal * rsiRebuyShares;
+                } else {
+                    strategyShares.rsi += rsiRebuyShares;
+                }
                 cashInvested.rsi_sell_rebuy -= rsiRebuyPool;
                 transactions.push({ date: toDateStr(ts), type: 'rsi_rebuy', price: price, shares: rsiRebuyShares, amount: rsiRebuyPool, cashFlow: -rsiRebuyPool, rsi6: ind.rsi6, ma5: ind.ma5, ma10: ind.ma10, ma20: ind.ma20, ma60: ind.ma60, ma120: ind.ma120, ma200: ind.ma200 });
                 rsiRebuyPool = 0;
@@ -222,7 +229,14 @@ var Backtest = (function () {
                         if (cfg.maSell.rebuy && maRebuyPool > 0) {
                             var rebuyShares = maRebuyPool / price;
                             shares += rebuyShares;
-                            strategyShares.ma += rebuyShares;
+                            var stratTotal = strategyShares.dca + strategyShares.rsi + strategyShares.ma;
+                            if (stratTotal > 0.0001) {
+                                strategyShares.dca += strategyShares.dca / stratTotal * rebuyShares;
+                                strategyShares.rsi += strategyShares.rsi / stratTotal * rebuyShares;
+                                strategyShares.ma += strategyShares.ma / stratTotal * rebuyShares;
+                            } else {
+                                strategyShares.ma += rebuyShares;
+                            }
                             cashInvested.ma_sell_rebuy -= maRebuyPool;
                             transactions.push({ date: toDateStr(ts), type: 'ma_rebuy', price: price, shares: rebuyShares, amount: maRebuyPool, cashFlow: -maRebuyPool, rsi6: ind.rsi6, ma5: ind.ma5, ma10: ind.ma10, ma20: ind.ma20, ma60: ind.ma60, ma120: ind.ma120, ma200: ind.ma200 });
                             maRebuyPool = 0;
